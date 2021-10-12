@@ -10,9 +10,11 @@ in order to have random but coherent transformations.'''
 
 class Compose(object):
     def __init__(self, transforms):
+        print("Compose instance created")
         self.transforms = transforms
 
     def __call__(self, images, intrinsics):
+        print("Compose instance is called via special method")
         for t in self.transforms:
             images, intrinsics = t(images, intrinsics)
         return images, intrinsics
@@ -31,11 +33,18 @@ class Normalize(object):
 
 
 class ArrayToTensor(object):
-    """Converts a list of numpy.ndarray (H x W x C) along with a intrinsics matrix to a list of torch.FloatTensor of shape (C x H x W) with a intrinsics tensor."""
+    """Converts a list of numpy.ndarray (H x W x C) along with an intrinsics matrix to a list of torch.FloatTensor of shape (C x H x W) with an intrinsics tensor."""
 
     def __call__(self, images, intrinsics):
         tensors = []
         for im in images:
+
+            ##########################################################
+            # print(" \n now in for loop of ArrayToTensor class \n")
+            # print(" datatype of im in images is \n ")
+            # print(type(im))
+            ##########################################################
+
             # put it from HWC to CHW format
             im = np.transpose(im, (2, 0, 1))
             # handle numpy array

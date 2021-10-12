@@ -16,18 +16,18 @@ import custom_transforms
 from utils import tensor2array, save_checkpoint
 from datasets.sequence_folders import SequenceFolder
 from datasets.pair_folders import PairFolder
-from loss_functions import compute_smooth_loss, compute_photo_and_geometry_loss, compute_errors
+from loss_functions import compute_smooth_loss, compute_photo_and_geometry_loss, compute_errors, show_images
 from logger import TermLogger, AverageMeter
 from tensorboardX import SummaryWriter
-
 
 parser = argparse.ArgumentParser(description='Structure from Motion Learner training on KITTI and CityScapes Dataset',
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('data', metavar='DIR', help='path to dataset')
-parser.add_argument('--folder-type', type=str, choices=['sequence', 'pair'], default='sequence', help='the dataset dype to train')
+parser.add_argument('--folder-type', type=str, choices=['sequence', 'pair'], default='sequence', help='the dataset type to train')
 parser.add_argument('--sequence-length', type=int, metavar='N', help='sequence length for training', default=3)
-parser.add_argument('-j', '--workers', default=4, type=int, metavar='N', help='number of data loading workers')
+# parser.add_argument('-j', '--workers', default=4, type=int, metavar='N', help='number of data loading workers')
+parser.add_argument('-j', '--workers', default=1, type=int, metavar='N', help='number of data loading workers')
 parser.add_argument('--epochs', default=200, type=int, metavar='N', help='number of total epochs to run')
 parser.add_argument('--epoch-size', default=0, type=int, metavar='N', help='manual epoch size (will match dataset size if not set)')
 parser.add_argument('-b', '--batch-size', default=4, type=int, metavar='N', help='mini-batch size')
@@ -54,18 +54,16 @@ parser.add_argument('--pretrained-disp', dest='pretrained_disp', default=None, m
 parser.add_argument('--pretrained-pose', dest='pretrained_pose', default=None, metavar='PATH', help='path to pre-trained Pose net model')
 parser.add_argument('--name', dest='name', type=str, required=True, help='name of the experiment, checkpoints are stored in checpoints/name')
 parser.add_argument('--padding-mode', type=str, choices=['zeros', 'border'], default='zeros',
-                    help='padding mode for image warping : this is important for photometric differenciation when going outside target image.'
+                    help='padding mode for image warping : this is important for photometric differentiation when going outside target image.'
                          ' zeros will null gradients outside target image.'
                          ' border will only null gradients of the coordinate outside (x or y)')
 parser.add_argument('--with-gt', action='store_true', help='use ground truth for validation. \
                     You need to store it in npy 2D arrays see data/kitti_raw_loader.py for an example')
 
-
 best_error = -1
 n_iter = 0
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 torch.autograd.set_detect_anomaly(True)
-
 
 def main():
     global best_error, n_iter, device
@@ -89,9 +87,10 @@ def main():
             output_writers.append(SummaryWriter(args.save_path/'valid'/str(i)))
 
     # Data loading code
+    print("normalize will be called next")
     normalize = custom_transforms.Normalize(mean=[0.45, 0.45, 0.45],
                                             std=[0.225, 0.225, 0.225])
-
+    print("train_transform will be composed with numerous subcomponents, no input")
     train_transform = custom_transforms.Compose([
         custom_transforms.RandomHorizontalFlip(),
         custom_transforms.RandomScaleCrop(),
@@ -123,6 +122,7 @@ def main():
     # if no Groundtruth is avalaible, Validation set is the same type as training set to measure photometric loss from warping
     if args.with_gt:
         from datasets.validation_folders import ValidationSet
+        print("transform = train_transform is called, no inputs")
         val_set = ValidationSet(
             args.data,
             transform=valid_transform,
@@ -138,31 +138,45 @@ def main():
             dataset=args.dataset
         )
     print('{} samples found in {} train scenes'.format(len(train_set), len(train_set.scenes)))
-    print('{} samples found in {} valid scenes'.format(len(val_set), len(val_set.scenes)))
+    print('{} samples found in {} validation scenes'.format(len(val_set), len(val_set.scenes)))
+
     train_loader = torch.utils.data.DataLoader(
-        train_set, batch_size=args.batch_size, shuffle=True,
-        num_workers=args.workers, pin_memory=True)
+        train_set, # dataset from which to load the data.
+        batch_size=args.batch_size, # how many samples per batch to load (default: 1).
+        shuffle=True, # set to True to have the data reshuffled at every epoch
+        # num_workers=args.workers,   # how many subprocesses to use for data loading.
+        #                             0 means that the data will be loaded in the main process. (default: 0)
+        pin_memory=True) # If True, the data loader will copy Tensors into CUDA pinned memory before returning them.
+
     val_loader = torch.utils.data.DataLoader(
-        val_set, batch_size=args.batch_size, shuffle=False,
-        num_workers=args.workers, pin_memory=True)
+        val_set,
+        batch_size=args.batch_size,
+        shuffle=False,
+        # num_workers=args.workers,
+        pin_memory=True)
 
     if args.epoch_size == 0:
         args.epoch_size = len(train_loader)
 
     # create model
     print("=> creating model")
+    # disp_net = models.DispResNet(args.resnet_layers, args.with_pretrain).to(device)
     disp_net = models.DispResNet(args.resnet_layers, args.with_pretrain).to(device)
     pose_net = models.PoseResNet(18, args.with_pretrain).to(device)
 
     # load parameters
     if args.pretrained_disp:
         print("=> using pre-trained weights for DispResNet")
-        weights = torch.load(args.pretrained_disp)
+        # to allow CPU training, map_location is added to torch.load()
+        # weights = torch.load(args.pretrained_disp)
+        weights = torch.load(args.pretrained_disp, map_location=device)
         disp_net.load_state_dict(weights['state_dict'], strict=False)
 
     if args.pretrained_pose:
         print("=> using pre-trained weights for PoseResNet")
-        weights = torch.load(args.pretrained_pose)
+        # to allow CPU training, map_location is added to torch.load()
+        # weights = torch.load(args.pretrained_pose)
+        weights = torch.load(args.pretrained_pose, map_location=device)
         pose_net.load_state_dict(weights['state_dict'], strict=False)
 
     disp_net = torch.nn.DataParallel(disp_net)
@@ -188,11 +202,13 @@ def main():
     logger = TermLogger(n_epochs=args.epochs, train_size=min(len(train_loader), args.epoch_size), valid_size=len(val_loader))
     logger.epoch_bar.start()
 
+    print('beginning epochs')
     for epoch in range(args.epochs):
         logger.epoch_bar.update(epoch)
 
         # train for one epoch
         logger.reset_train_bar()
+        print('beginning training')
         train_loss = train(args, train_loader, disp_net, pose_net, optimizer, args.epoch_size, logger, training_writer)
         logger.train_writer.write(' * Avg Loss : {:.3f}'.format(train_loss))
 
@@ -249,8 +265,24 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
     for i, (tgt_img, ref_imgs, intrinsics, intrinsics_inv) in enumerate(train_loader):
         log_losses = i > 0 and n_iter % args.print_freq == 0
 
+        ################################################################################################################
+        # show intrinsics properties
+        # change with every image
+        print(intrinsics)
+        print('\n intrinsics datatype: \n')
+        print(type(intrinsics))
+        print('\n ref_img datatype: \n')
+        print(type(ref_imgs))
+        # print('\n plot tgt_img:')
+        # show_images(tgt_img)
+        # test_number = int(input("Enter a number: "))
+        # print ("The number you entered is: ", test_number)
+        ################################################################################################################
+
         # measure data loading time
         data_time.update(time.time() - end)
+
+        # write target and reference images to CUDA device memory
         tgt_img = tgt_img.to(device)
         ref_imgs = [img.to(device) for img in ref_imgs]
         intrinsics = intrinsics.to(device)
@@ -259,13 +291,32 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
         tgt_depth, ref_depths = compute_depth(disp_net, tgt_img, ref_imgs)
         poses, poses_inv = compute_pose_with_inv(pose_net, tgt_img, ref_imgs)
 
+        ################################################################################################################
+        print('\n pose: \n')
+        print(poses)
+        ################################################################################################################
+        # print('\n inv_pose datatype: \n')
+        # print(poses_inv)
+        # print('ref_depths shape is: \n',ref_depths.shape)
+        ################################################################################################################
+        ################################################################################################################
+        ################################################################################################################
         loss_1, loss_3 = compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, ref_depths,
                                                          poses, poses_inv, args.num_scales, args.with_ssim,
                                                          args.with_mask, args.with_auto_mask, args.padding_mode)
-
         loss_2 = compute_smooth_loss(tgt_depth, tgt_img, ref_depths, ref_imgs)
-
+        ################################################################################################################
+        ################################################################################################################
+        ################################################################################################################
         loss = w1*loss_1 + w2*loss_2 + w3*loss_3
+
+        ################################################################################################################
+        # ask for input to interrupt script execution
+
+        print("The loss_1 and loss_3 are:", loss_1, loss_3)
+        test_number = int(input("Enter a number: "))
+        # print ("The number you entered is: ", test_number)
+        ################################################################################################################
 
         if log_losses:
             train_writer.add_scalar('photometric_error', loss_1.item(), n_iter)
@@ -428,6 +479,17 @@ def compute_depth(disp_net, tgt_img, ref_imgs):
 
     ref_depths = []
     for ref_img in ref_imgs:
+
+
+        ################################################################################################################
+        # print(" \n ref_imgs datatype is: \n")
+
+        # print(type(ref_imgs))
+        # print(ref_imgs)
+        # print(count.ref_imgs)
+        ################################################################################################################
+
+
         ref_depth = [1/disp for disp in disp_net(ref_img)]
         ref_depths.append(ref_depth)
 
@@ -442,7 +504,6 @@ def compute_pose_with_inv(pose_net, tgt_img, ref_imgs):
         poses_inv.append(pose_net(ref_img, tgt_img))
 
     return poses, poses_inv
-
 
 if __name__ == '__main__':
     main()

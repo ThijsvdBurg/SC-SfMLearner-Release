@@ -5,6 +5,13 @@ import torch.nn.functional as F
 from inverse_warp import inverse_warp2, inverse_warp
 import math
 
+################################################################################################################
+# for intermediate data visualisation
+# import matplotlib.pyplot as plt
+import numpy
+################################################################################################################
+
+
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 
@@ -53,8 +60,21 @@ def compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, re
     geometry_loss = 0
 
     num_scales = min(len(tgt_depth), max_scales)
+    ################################################################################################################
+    print('\n computing photo and geometry loss:')
+    print('\n numscales:')
+    print(num_scales)
+    # print('\n computing photo and geometry loss:')
+    print('\n len(tgt_img):')
+    print(len(tgt_img))
+    # print('\n computing photo and geometry loss:')
+    print('\n len(ref_imgs):')
+    print(len(ref_imgs))
+
+    ################################################################################################################
+
     for ref_img, ref_depth, pose, pose_inv in zip(ref_imgs, ref_depths, poses, poses_inv):
-        for s in range(num_scales):
+        for scale in range(num_scales):
 
             # # downsample img
             # b, _, h, w = tgt_depth[s].size()
@@ -71,15 +91,21 @@ def compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, re
 
             # upsample depth
             b, _, h, w = tgt_img.size()
+            #########################################################################################################
+            print('\n plot tgt_img:')
+            show_images(tgt_img)
+            test_number = int(input("Enter a number: "))
+            print ("The number you entered is: ", test_number)
+            #########################################################################################################
             tgt_img_scaled = tgt_img
             ref_img_scaled = ref_img
             intrinsic_scaled = intrinsics
-            if s == 0:
-                tgt_depth_scaled = tgt_depth[s]
-                ref_depth_scaled = ref_depth[s]
+            if scale == 0:
+                tgt_depth_scaled = tgt_depth[scale]
+                ref_depth_scaled = ref_depth[scale]
             else:
-                tgt_depth_scaled = F.interpolate(tgt_depth[s], (h, w), mode='nearest')
-                ref_depth_scaled = F.interpolate(ref_depth[s], (h, w), mode='nearest')
+                tgt_depth_scaled = F.interpolate(tgt_depth[scale], (h, w), mode='nearest')
+                ref_depth_scaled = F.interpolate(ref_depth[scale], (h, w), mode='nearest')
 
             photo_loss1, geometry_loss1 = compute_pairwise_loss(tgt_img_scaled, ref_img_scaled, tgt_depth_scaled, ref_depth_scaled, pose,
                                                                 intrinsic_scaled, with_ssim, with_mask, with_auto_mask, padding_mode)
@@ -204,3 +230,28 @@ def compute_errors(gt, pred, dataset):
 
     return [metric.item() / batch_size for metric in [abs_diff, abs_rel, sq_rel, a1, a2, a3]]
 
+
+def show_images(img):
+    # import matplotlib
+    import torch
+    import matplotlib.pyplot as plt
+    # simulate data
+
+    # data = np.random.rand(50, 64)
+    # create figure
+    # fig = plt.figure(figsize=(256,320))
+
+    print(img.size())
+    img2 = img.squeeze()
+    print(img2.size())
+    plt.imshow( img2 )
+    plt.show()
+    # loop over images
+    # for i in range(1):
+    #     print(i)
+    #     img = np.reshape(data[i : (i + 1)], (8, 8))
+    #     fig.add_subplot(4, 4, i + 1)
+    #     plt.imshow(img)
+
+    # save image
+    # plt.savefig("subplot_image")
