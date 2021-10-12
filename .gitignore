@@ -1,4 +1,4 @@
-datasets/nyu_rectified
+datasets/rectified*
 __pycache__
 checkpoints
 .DS_Store
