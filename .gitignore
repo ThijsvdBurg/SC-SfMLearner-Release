@@ -1,4 +1,4 @@
 datasets/rectified*
 __pycache__
-checkpoints
+checkpoints/res*
 .DS_Store
