@@ -15,13 +15,13 @@ import rosbag
 from cv_bridge import CvBridge
 
 def main():
-    """Extract a folder of images from a rosbag.
+    """Extract an image sequence from a rosbag to be used in SC-SfM-learner.
     """
     parser = argparse.ArgumentParser(description="Extract images from a ROS bag.")
     parser.add_argument("bag_file", help="Input ROS bag.")
     parser.add_argument("output_dir", help="Output directory.")
     parser.add_argument("image_topic", help="Image topic.")
-    parser.add_argument("intrinsics_topic", help="Topic containing CameraInfo.")
+    # parser.add_argument("intrinsics_topic", help="Topic containing CameraInfo.")
 
     args = parser.parse_args()
 
@@ -30,6 +30,7 @@ def main():
     bag = rosbag.Bag(args.bag_file, "r")
     bridge = CvBridge()
     count = 0
+
     for topic, msg, t in bag.read_messages(topics=[args.image_topic, ]):
         cv_image = bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
         # intrinsics =

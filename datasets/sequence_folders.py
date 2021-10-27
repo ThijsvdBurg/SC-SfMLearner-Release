@@ -5,7 +5,6 @@ from path import Path
 import random
 import os
 
-
 def load_as_float(path):
     return imread(path).astype(np.float32)
 
