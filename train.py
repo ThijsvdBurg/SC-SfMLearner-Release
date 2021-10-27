@@ -497,7 +497,6 @@ def compute_depth(disp_net, tgt_img, ref_imgs):
 
     return tgt_depth, ref_depths
 
-
 def compute_pose_with_inv(pose_net, tgt_img, ref_imgs):
     poses = []
     poses_inv = []

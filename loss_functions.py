@@ -92,8 +92,9 @@ def compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, re
             # upsample depth
             b, _, h, w = tgt_img.size()
             #########################################################################################################
-            print('\n plot tgt_img:')
-            show_images(tgt_img)
+            print('\n plot ref_img:')
+            show_images(ref_img)
+            # print(type(ref_img))
             test_number = int(input("Enter a number: "))
             print ("The number you entered is: ", test_number)
             #########################################################################################################
@@ -233,18 +234,18 @@ def compute_errors(gt, pred, dataset):
 
 def show_images(img):
     # import matplotlib
-    import torch
     import matplotlib.pyplot as plt
-    # simulate data
+    import torchvision.transforms.functional as F
 
-    # data = np.random.rand(50, 64)
-    # create figure
-    # fig = plt.figure(figsize=(256,320))
-
+    b, _, h, w = img.size()
     print(img.size())
     img2 = img.squeeze()
     print(img2.size())
-    plt.imshow( img2 )
+
+    img3 = img2.permute(1,2,0)
+
+    print(img3.size())
+    plt.imshow( img3 )
     plt.show()
     # loop over images
     # for i in range(1):
