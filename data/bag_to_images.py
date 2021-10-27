@@ -18,10 +18,10 @@ def main():
     """Extract a folder of images from a rosbag.
     """
     parser = argparse.ArgumentParser(description="Extract images from a ROS bag.")
-    parser.add_argument("bag_file", help="Input ROS bag.")
-    parser.add_argument("output_dir", help="Output directory.")
-    parser.add_argument("image_topic", help="Image topic.")
-    parser.add_argument("intrinsics_topic", help="Topic containing CameraInfo.")
+    parser.add_argument("--bag_file", help="Input ROS bag.")
+    parser.add_argument("--output_dir", help="Output directory.")
+    parser.add_argument("--image_topic", help="Image topic.")
+    # parser.add_argument("--intrinsics_topic", help="Topic containing CameraInfo.")
 
     args = parser.parse_args()
 
