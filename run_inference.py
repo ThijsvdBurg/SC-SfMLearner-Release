@@ -1,7 +1,7 @@
 import torch
 
 from imageio import imread, imsave
-from scipy.misc import imresize
+# from scipy.misc import imresize
 import numpy as np
 from path import Path
 import argparse
@@ -60,7 +60,10 @@ def main():
 
         h, w, _ = img.shape
         if (not args.no_resize) and (h != args.img_height or w != args.img_width):
-            img = imresize(img, (args.img_height, args.img_width)).astype(np.float32)
+        # imresize was deprecated in scipy.misc so i cold either downgrade scipy or
+            # replace line below with cv2.resize, which was easier
+            # img = imresize(img, (args.img_height, args.img_width)).astype(np.float32)
+            img = cv2.resize(img, (args.img_height, args.img_width)).astype(np.float32)
         img = np.transpose(img, (2, 0, 1))
 
         tensor_img = torch.from_numpy(img).unsqueeze(0)
