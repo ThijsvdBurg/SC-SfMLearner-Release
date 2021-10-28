@@ -11,10 +11,6 @@ from tqdm import tqdm
 from models import DispResNet
 from utils import tensor2array
 
-# updated version, works on Colab
-# swapped height and width, they were the wrong way around for usage with cv2.resize
-# also has some verbose lines used for seeing the tensor shapes at different code locations
-
 parser = argparse.ArgumentParser(description='Inference script for DispNet learned with \
                                  Structure from Motion Learner inference on KITTI Dataset',
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
