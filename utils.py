@@ -7,6 +7,7 @@ import datetime
 from collections import OrderedDict
 from matplotlib import cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+from sensor_msgs.msg import CameraInfo
 
 
 def high_res_colormap(low_res_cmap, resolution=1000, max_value=1):
@@ -64,3 +65,23 @@ def save_checkpoint(save_path, dispnet_state, exp_pose_state, is_best, filename=
         for prefix in file_prefixes:
             shutil.copyfile(save_path/'{}_{}'.format(prefix, filename),
                             save_path/'{}_model_best.pth.tar'.format(prefix))
+
+
+
+def make_camera_msg(cam):
+    camera_info_msg = CameraInfo()
+    width, height = cam[0], cam[1]
+    fx, fy = cam[2], cam[3]
+    cx, cy = cam[4], cam[5]
+    camera_info_msg.width = width
+    camera_info_msg.height = height
+    camera_info_msg.K = [fx, 0, cx,
+                         0, fy, cy,
+                         0, 0, 1]
+
+    camera_info_msg.D = [0, 0, 0, 0]
+
+    camera_info_msg.P = [fx, 0, cx, 0,
+                         0, fy, cy, 0,
+                         0, 0, 1, 0]
+    return camera_info_msg

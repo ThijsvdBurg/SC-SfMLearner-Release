@@ -11,7 +11,7 @@ import argparse
 # import cv2
 import rosbag
 # from sensor_msgs.msg import Image
-from sensor_msgs.msg import CameraInfo
+# from sensor_msgs.msg import CameraInfo
 # from cv_bridge import CvBridge
 
 def main():
@@ -52,20 +52,3 @@ if __name__ == '__main__':
 
 
 
-def make_camera_msg(cam):
-    camera_info_msg = CameraInfo()
-    width, height = cam[0], cam[1]
-    fx, fy = cam[2], cam[3]
-    cx, cy = cam[4], cam[5]
-    camera_info_msg.width = width
-    camera_info_msg.height = height
-    camera_info_msg.K = [fx, 0, cx,
-                         0, fy, cy,
-                         0, 0, 1]
-
-    camera_info_msg.D = [0, 0, 0, 0]
-
-    camera_info_msg.P = [fx, 0, cx, 0,
-                         0, fy, cy, 0,
-                         0, 0, 1, 0]
-    return camera_info_msg
