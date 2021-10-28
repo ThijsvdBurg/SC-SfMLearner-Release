@@ -1,8 +1,11 @@
 torch >= 1.5.1
 imageio
 matplotlib
-scipy
-argparse
+scipy # imresize deprecated, if you want to use it, downgrade to == 1.1.0
+
+# comment because of Colab issue
+# argparse
+
 tensorboardX
 blessings
 progressbar2
