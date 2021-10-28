@@ -26,10 +26,8 @@ parser = argparse.ArgumentParser(description='Structure from Motion Learner trai
 parser.add_argument('data', metavar='DIR', help='path to dataset')
 parser.add_argument('--folder-type', type=str, choices=['sequence', 'pair'], default='sequence', help='the dataset type to train')
 parser.add_argument('--sequence-length', type=int, metavar='N', help='sequence length for training', default=3)
-
 # parser.add_argument('-j', '--workers', default=4, type=int, metavar='N', help='number of data loading workers')
-
-parser.add_argument('-j', '--workers', default=1, type=int, metavar='N', help='number of data loading workers')
+parser.add_argument('-j', '--workers', default=2, type=int, metavar='N', help='number of data loading workers')
 parser.add_argument('--epochs', default=200, type=int, metavar='N', help='number of total epochs to run')
 parser.add_argument('--epoch-size', default=0, type=int, metavar='N', help='manual epoch size (will match dataset size if not set)')
 parser.add_argument('-b', '--batch-size', default=4, type=int, metavar='N', help='mini-batch size')
@@ -117,6 +115,7 @@ def main():
             args.data,
             seed=args.seed,
             train=True,
+            # print("transform = train_transform is called, no inputs"),
             transform=train_transform
         )
 
@@ -146,15 +145,15 @@ def main():
         train_set, # dataset from which to load the data.
         batch_size=args.batch_size, # how many samples per batch to load (default: 1).
         shuffle=True, # set to True to have the data reshuffled at every epoch
-        # num_workers=args.workers,   # how many subprocesses to use for data loading.
-        #                             0 means that the data will be loaded in the main process. (default: 0)
+        num_workers=args.workers,   # how many subprocesses to use for data loading.
+                                    # 0 means that the data will be loaded in the main process. (default: 0)
         pin_memory=True) # If True, the data loader will copy Tensors into CUDA pinned memory before returning them.
 
     val_loader = torch.utils.data.DataLoader(
         val_set,
         batch_size=args.batch_size,
         shuffle=False,
-        # num_workers=args.workers,
+        num_workers=args.workers,
         pin_memory=True)
 
     if args.epoch_size == 0:
@@ -204,13 +203,11 @@ def main():
     logger = TermLogger(n_epochs=args.epochs, train_size=min(len(train_loader), args.epoch_size), valid_size=len(val_loader))
     logger.epoch_bar.start()
 
-    print('beginning epochs')
     for epoch in range(args.epochs):
         logger.epoch_bar.update(epoch)
 
         # train for one epoch
         logger.reset_train_bar()
-        print('beginning training')
         train_loss = train(args, train_loader, disp_net, pose_net, optimizer, args.epoch_size, logger, training_writer)
         logger.train_writer.write(' * Avg Loss : {:.3f}'.format(train_loss))
 
@@ -273,12 +270,12 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
         print(intrinsics)
         print('\n intrinsics datatype: \n')
         print(type(intrinsics))
-        print('\n ref_img datatype: \n')
-        print(type(ref_imgs))
-        # print('\n plot tgt_img:')
-        # show_images(tgt_img)
-        # test_number = int(input("Enter a number: "))
-        # print ("The number you entered is: ", test_number)
+        print('\n tgt_img datatype: \n')
+        print(type(tgt_img))
+        print('\n plot tgt_img:')
+        show_images(tgt_img)
+        test_number = int(input("Enter a number: "))
+        print ("The number you entered is: ", test_number)
         ################################################################################################################
 
         # measure data loading time
@@ -484,10 +481,10 @@ def compute_depth(disp_net, tgt_img, ref_imgs):
 
 
         ################################################################################################################
-        # print(" \n ref_imgs datatype is: \n")
+        print(" \n ref_imgs datatype is: \n")
 
-        # print(type(ref_imgs))
-        # print(ref_imgs)
+        print(type(ref_imgs))
+        print(ref_imgs)
         # print(count.ref_imgs)
         ################################################################################################################
 
@@ -496,6 +493,7 @@ def compute_depth(disp_net, tgt_img, ref_imgs):
         ref_depths.append(ref_depth)
 
     return tgt_depth, ref_depths
+
 
 def compute_pose_with_inv(pose_net, tgt_img, ref_imgs):
     poses = []
