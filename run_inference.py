@@ -2,9 +2,7 @@ import torch
 
 from imageio import imread, imsave
 # from scipy.misc import imresize
-
 import cv2
-
 import numpy as np
 from path import Path
 import argparse
@@ -12,6 +10,10 @@ from tqdm import tqdm
 
 from models import DispResNet
 from utils import tensor2array
+
+# updated version, works on Colab
+# swapped height and width, they were the wrong way around for usage with cv2.resize
+# also has some verbose lines used for seeing the tensor shapes at different code locations
 
 parser = argparse.ArgumentParser(description='Inference script for DispNet learned with \
                                  Structure from Motion Learner inference on KITTI Dataset',
@@ -32,7 +34,6 @@ parser.add_argument('--resnet-layers', required=True, type=int, default=18, choi
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-
 @torch.no_grad()
 def main():
     args = parser.parse_args()
@@ -41,7 +42,7 @@ def main():
         return
 
     disp_net = DispResNet(args.resnet_layers, False).to(device)
-    weights = torch.load(args.pretrained, map_location=device)
+    weights = torch.load(args.pretrained)
     disp_net.load_state_dict(weights['state_dict'])
     disp_net.eval()
 
@@ -62,28 +63,69 @@ def main():
         img = imread(file).astype(np.float32)
 
         h, w, _ = img.shape
+        print('\n height is', h)
+        print('\n width is', w)
         if (not args.no_resize) and (h != args.img_height or w != args.img_width):
-        # imresize was deprecated in scipy.misc so i cold either downgrade scipy or
+
+            # imresize was deprecated in scipy.misc so i cold either downgrade scipy or
             # replace line below with cv2.resize, which was easier
             # img = imresize(img, (args.img_height, args.img_width)).astype(np.float32)
+
             img = cv2.resize(img, (args.img_height, args.img_width)).astype(np.float32)
-        img = np.transpose(img, (2, 0, 1))
+            img2 = cv2.resize(img, (args.img_width, args.img_height)).astype(np.float32)
+            print('\n np img size is ',img.shape)
+        #############################################################################################
+        img_transpose = np.transpose(img2, (2, 0, 1))
+        print('\n np img_transpose size is ',img_transpose.shape)
+        tensor_img = torch.from_numpy(img_transpose).unsqueeze(0)
 
-        tensor_img = torch.from_numpy(img).unsqueeze(0)
+        print('\n tensor_img size is ',tensor_img.shape)
         tensor_img = ((tensor_img/255 - 0.45)/0.225).to(device)
-
+        #############################################################################################
         output = disp_net(tensor_img)[0]
+        print('dispnet output size is ',output.shape)
+        # print max output value
+        # print('max output disparity value is: {}'.format(output.max().item()))
 
         file_path, file_ext = file.relpath(args.dataset_dir).splitext()
         file_name = '-'.join(file_path.splitall())
 
         if args.output_disp:
-            disp = (255*tensor2array(output, max_value=None, colormap='bone')).astype(np.uint8)
-            imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), np.transpose(disp, (1, 2, 0)))
+            # disp = (255*tensor2array(output, max_value=None, colormap='bone')).astype(np.uint8)
+            disp = (255*tensor2array(output, max_value=None, colormap='rainbow')).astype(np.uint8)
+            disp_transpose = np.transpose(disp, (1,2,0))
+            # disp_transpose = np.transpose(disp, (2,1,0))
+            ###########################################################################################################
+            print('np disp type is',disp.shape)
+            # disp.shape
+            print('np disp_transpose size is', disp_transpose.shape)
+
+            # disp_transpose.shape
+            # imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), np.transpose(disp, (1, 2, 0)))
+            ###########################################################################################################
+            imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), disp_transpose)
         if args.output_depth:
-            depth = 1/output
-            depth = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
-            imsave(output_dir/'{}_depth{}'.format(file_name, file_ext), np.transpose(depth, (1, 2, 0)))
+            # depth = 1/output
+            # depth = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
+            # imsave(output_dir/'{}_depth_max_10{}'.format(file_name, file_ext), np.transpose(depth , (1, 2, 0)))
+
+            # imsave(output_dir/'{}_depth{}'.format(file_name, file_ext), np.transpose(depth, (1, 2, 0)))
+            # depth2 = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
+
+            depth3 = 1/output
+            print('')
+            # print('max depth before t2a is: {}'.format(depth3.max().item()))
+            # print('min depth before t2a is: {}'.format(depth3.min().item()))
+            depth3 = (255*tensor2array(depth3, colormap='bone' )).astype(np.uint8)
+            # print('max depth after t2a is: {}'.format(depth3.max().item()))
+            # print('min depth after t2a is: {}'.format(depth3.min().item()))
+            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth3, (1, 2, 0)))
+
+
+            # depth = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
+
+            # imsave(output_dir/'{}_depth2{}'.format(file_name, file_ext), np.transpose(depth2, (1, 2, 0)))
+
 
 
 if __name__ == '__main__':
