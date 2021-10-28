@@ -8,11 +8,11 @@
 
 import os
 import argparse
-import cv2
+# import cv2
 import rosbag
 # from sensor_msgs.msg import Image
 from sensor_msgs.msg import CameraInfo
-from cv_bridge import CvBridge
+# from cv_bridge import CvBridge
 
 def main():
     """Extract an image sequence from a rosbag to be used in SC-SfM-learner.
@@ -26,18 +26,22 @@ def main():
 
     args = parser.parse_args()
 
-    print("Extract images from %s on topic %s into %s" % (args.bag_file,args.image_topic, args.output_dir))
+    # print("Extract images from %s on topic %s into %s" % (args.bag_file,args.image_topic, args.output_dir))
 
     bag = rosbag.Bag(args.bag_file, "r")
-    bridge = CvBridge()
-    count = 0
+    # bridge = CvBridge()
+    count = 3
+    # count = 0
 
-    for topic, msg, t in bag.read_messages(topics=[args.info_topic, ]):
+    for topic, msg, t in bag.read_messages(topics=[args.info_topic]):
         # cv_image = bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
-        intrinsics = make_camera_msg(msg)
+        camera_info_msg = make_camera_msg(msg)
+        K = camera_info_msg.K
+        print(type(K))
         print("Wrote info %i" % count)
 
-        count += 1
+        # count += 1
+        count -= 1
 
     bag.close()
 
