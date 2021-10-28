@@ -7,7 +7,7 @@ import math
 
 ################################################################################################################
 # for intermediate data visualisation
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy
 ################################################################################################################
 
@@ -91,13 +91,6 @@ def compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, re
 
             # upsample depth
             b, _, h, w = tgt_img.size()
-            #########################################################################################################
-            print('\n plot ref_img:')
-            show_images(ref_img)
-            # print(type(ref_img))
-            test_number = int(input("Enter a number: "))
-            print ("The number you entered is: ", test_number)
-            #########################################################################################################
             tgt_img_scaled = tgt_img
             ref_img_scaled = ref_img
             intrinsic_scaled = intrinsics
@@ -232,21 +225,22 @@ def compute_errors(gt, pred, dataset):
     return [metric.item() / batch_size for metric in [abs_diff, abs_rel, sq_rel, a1, a2, a3]]
 
 
-def show_images(img):
-    # import matplotlib
-    import matplotlib.pyplot as plt
-    import torchvision.transforms.functional as F
+def show_images(tgt_img):
 
-    b, _, h, w = img.size()
-    print(img.size())
-    img2 = img.squeeze()
-    print(img2.size())
+    # simulate data
+    # data = np.random.rand(50, 64)
 
-    img3 = img2.permute(1,2,0)
+    # create figure
+    fig = plt.figure(figsize=(256,320))
 
-    print(img3.size())
-    plt.imshow( img3 )
-    plt.show()
+
+    tgt_img_np = tgt_img.view(256,320,3).numpy()
+
+    randtensor = torch.rand([4,4,3])
+
+    type(tgt_img_np)
+    plt.imshow(randtensor)
+
     # loop over images
     # for i in range(1):
     #     print(i)
@@ -255,4 +249,4 @@ def show_images(img):
     #     plt.imshow(img)
 
     # save image
-    # plt.savefig("subplot_image")
+    plt.savefig("subplot_image")

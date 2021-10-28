@@ -28,7 +28,6 @@ def mkdir_if_not_exists(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-
 def compute_depth_errors(gt, pred):
     """Computation of error metrics between predicted and ground truth depths
     Args:
