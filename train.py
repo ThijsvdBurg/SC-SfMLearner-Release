@@ -6,7 +6,9 @@ from path import Path
 
 import numpy as np
 import torch
+##########################################################################################################
 import torchvision
+##########################################################################################################
 import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
@@ -481,10 +483,13 @@ def compute_depth(disp_net, tgt_img, ref_imgs):
     print('shape of tgt img',tgt_img.shape)
     h = 480
     w = 640
-    img_shape = torchvision.transforms.Resize((h,w))
-    tgt_img = img_shape(tgt_img) #cv2.resize(tgt_img, (480, 640)).astype(np.float32)
+    img_reshape = torchvision.transforms.Resize((h,w))
+
+    tgt_img = img_reshape(tgt_img) #cv2.resize(tgt_img, (480, 640)).astype(np.float32)
+
     ################################################################################################################
     # cv2.resize(img, (args.img_height, args.img_width)).astype(np.float32)
+
     tgt_depth = [1/disp for disp in disp_net(tgt_img)]
 
     ref_depths = []
@@ -494,8 +499,8 @@ def compute_depth(disp_net, tgt_img, ref_imgs):
 
         print(" \n ref_imgs datatype is: \n")
 
+        ref_img = img_reshape(ref_img)
 
-        ref_img = cv2.resize(ref_img, (480, 640)).astype(np.float32)
         print(type(ref_imgs))
         print(ref_imgs)
         # print(count.ref_imgs)
