@@ -122,7 +122,5 @@ def main():
 
             # imsave(output_dir/'{}_depth2{}'.format(file_name, file_ext), np.transpose(depth2, (1, 2, 0)))
 
-
-
 if __name__ == '__main__':
     main()
