@@ -6,10 +6,11 @@ from path import Path
 
 import numpy as np
 import torch
+import torchvision
 import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
-
+import cv2
 import models
 
 import custom_transforms
@@ -267,15 +268,15 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
         ################################################################################################################
         # show intrinsics properties
         # change with every image
-        print(intrinsics)
-        print('\n intrinsics datatype: \n')
-        print(type(intrinsics))
-        print('\n tgt_img datatype: \n')
-        print(type(tgt_img))
-        print('\n plot tgt_img:')
-        show_images(tgt_img)
-        test_number = int(input("Enter a number: "))
-        print ("The number you entered is: ", test_number)
+        # print(intrinsics)
+        # print('\n intrinsics datatype: \n')
+        # print(type(intrinsics))
+        # print('\n tgt_img datatype: \n')
+        # print(type(tgt_img))
+        # print('\n plot tgt_img:')
+        # show_images(tgt_img)
+        #test_number = int(input("Enter a number: "))
+        #print ("The number you entered is: ", test_number)
         ################################################################################################################
 
         # measure data loading time
@@ -474,15 +475,27 @@ def validate_with_gt(args, val_loader, disp_net, epoch, logger, output_writers=[
 
 
 def compute_depth(disp_net, tgt_img, ref_imgs):
+
+    ################################################################################################################
+    print('type of tgt img',type(tgt_img))
+    print('shape of tgt img',tgt_img.shape)
+    h = 480
+    w = 640
+    img_shape = torchvision.transforms.Resize((h,w))
+    tgt_img = img_shape(tgt_img) #cv2.resize(tgt_img, (480, 640)).astype(np.float32)
+    ################################################################################################################
+    # cv2.resize(img, (args.img_height, args.img_width)).astype(np.float32)
     tgt_depth = [1/disp for disp in disp_net(tgt_img)]
 
     ref_depths = []
     for ref_img in ref_imgs:
 
 
-        ################################################################################################################
+
         print(" \n ref_imgs datatype is: \n")
 
+
+        ref_img = cv2.resize(ref_img, (480, 640)).astype(np.float32)
         print(type(ref_imgs))
         print(ref_imgs)
         # print(count.ref_imgs)
