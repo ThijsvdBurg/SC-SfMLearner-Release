@@ -10,11 +10,11 @@ in order to have random but coherent transformations.'''
 
 class Compose(object):
     def __init__(self, transforms):
-        print("Compose instance created")
+        # print("Compose instance created")
         self.transforms = transforms
 
     def __call__(self, images, intrinsics):
-        print("Compose instance is called via special method")
+        # print("Compose instance is called via special method")
         for t in self.transforms:
             images, intrinsics = t(images, intrinsics)
         return images, intrinsics

@@ -337,6 +337,9 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
         loss = w1*loss_1 + w2*loss_2 + w3*loss_3
 
         print("The loss_1 and loss_3 are:", loss_1, loss_3)
+        # test_number = int(input("Enter a number: "))
+        # print ("The number you entered is: ", test_number)
+        ################################################################################################################
 
         if log_losses:
             train_writer.add_scalar('photometric_error', loss_1.item(), n_iter)
@@ -515,6 +518,13 @@ def compute_pose_with_inv(args, pose_net, tgt_img, ref_imgs):
     poses = []
     poses_inv = []
 
+    ################################################################################################################
+    # h = 480
+    # print('train line 549 tgt img shape',tgt_img.shape)
+    # w = 640
+    # img_reshape = torchvision.transforms.Resize((h,w))
+    # tgt_img = img_reshape(tgt_img) #cv2.resize(tgt_img, (480, 640)).astype(np.float32)
+    ################################################################################################################
     for ref_img in ref_imgs:
         img_reshape = torchvision.transforms.Resize((args.img_height,args.img_width))
         ref_img = img_reshape(ref_img)
