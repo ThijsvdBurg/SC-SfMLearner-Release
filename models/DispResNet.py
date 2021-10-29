@@ -89,16 +89,16 @@ class DepthDecoder(nn.Module):
         x = input_features[-1]
 
         ################################################################################################################
-        print('line 90 dispresnet: x size:',x.shape,'\n type:', type(x))
+        print('line 92 dispresnet: x size:',x.shape,'\n type:', type(x))   #line 92 dispresnet: x size: torch.Size([4, 512, 23, 40])
         ################################################################################################################
         for i in range(4, -1, -1):
             x = self.convs[("upconv", i, 0)](x)
             x = [upsample(x)]
             ################################################################################################################
-            print('line 95 dispresnet: x size:',x.shape,'\n type:', type(x))
+            # print('line 95 dispresnet: x size:',x.shape,'\n type:', type(x))
             if self.use_skips and i > 0:
                 x += [input_features[i - 1]]
-            print('line 98 dispresnet: x size:',x.shape,'\n type:', type(x))
+            # print('line 98 dispresnet: x size:',x.shape,'\n type:', type(x))
             ################################################################################################################
             x = torch.cat(x, 1)
             x = self.convs[("upconv", i, 1)](x)
