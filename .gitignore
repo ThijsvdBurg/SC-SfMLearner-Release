@@ -1,6 +1,6 @@
 datasets/rectified*
 __pycache__
-checkpoints/res*
+checkpoints/
 .DS_Store
 rectified_nyu_r18_tbu
 tu_delft_husky
