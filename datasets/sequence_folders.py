@@ -21,7 +21,7 @@ class SequenceFolder(data.Dataset):
         transform functions must take in a list a images and a numpy array (usually intrinsics matrix)
     """
 
-    def __init__(self, root, seed=None, train=True, sequence_length=3, transform=None, skip_frames=1, dataset='kitti', imgh=480, imgw=640):
+    def __init__(self, root, seed=None, train=True, sequence_length=3, transform=None, skip_frames=1, dataset='kitti', imgh=256, imgw=832): #256, 832
         np.random.seed(seed)
         random.seed(seed)
         self.root = Path(root)

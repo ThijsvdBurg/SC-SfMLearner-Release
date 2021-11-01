@@ -50,6 +50,8 @@ parser.add_argument('--with-mask', type=int, default=1, help='with the the mask 
 parser.add_argument('--with-auto-mask', type=int,  default=0, help='with the the mask for stationary points')
 parser.add_argument('--with-pretrain', type=int,  default=1, help='with or without imagenet pretrain for resnet')
 parser.add_argument('--dataset', type=str, choices=['kitti', 'nyu'], default='kitti', help='the dataset to train')
+parser.add_argument("--img-height", default=480, type=int, help="Image height")
+parser.add_argument("--img-width", default=640, type=int, help="Image width")
 parser.add_argument('--pretrained-disp', dest='pretrained_disp', default=None, metavar='PATH', help='path to pre-trained dispnet model')
 parser.add_argument('--pretrained-pose', dest='pretrained_pose', default=None, metavar='PATH', help='path to pre-trained Pose net model')
 parser.add_argument('--name', dest='name', type=str, required=True, help='name of the experiment, checkpoints are stored in checpoints/name')
@@ -109,9 +111,9 @@ def main():
             seed=args.seed,
             train=True,
             sequence_length=args.sequence_length,
-            dataset=args.dataset
-            # imgh=args.img_heigth,
-            # imgw=args.img_width
+            dataset=args.dataset,
+            imgh=args.img_height,
+            imgw=args.img_width
         )
     else:
         train_set = PairFolder(
@@ -138,7 +140,9 @@ def main():
             seed=args.seed,
             train=False,
             sequence_length=args.sequence_length,
-            dataset=args.dataset
+            dataset=args.dataset,
+            imgh=args.img_height,
+            imgw=args.img_width
         )
     print('{} samples found in {} train scenes'.format(len(train_set), len(train_set.scenes)))
     print('{} samples found in {} validation scenes'.format(len(val_set), len(val_set.scenes)))
