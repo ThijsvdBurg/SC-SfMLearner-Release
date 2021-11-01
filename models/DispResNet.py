@@ -100,6 +100,12 @@ class DepthDecoder(nn.Module):
                 x += [input_features[i - 1]]
             # print('line 98 dispresnet: x size:',x.shape,'\n type:', type(x))
             ################################################################################################################
+
+            # print(' \n line 103 dispresnet: x type \n:', type(x))
+            # print(' \n line 103 dispresnet: x length \n:', len(x))
+            # print(x)
+            # x_tensor = torch.FloatTensor(x)
+            # print(' \n line 103 dispresnet: x_tensor shape&type \n:',x_tensor.shape, type(x))
             x = torch.cat(x, 1)
             x = self.convs[("upconv", i, 1)](x)
             if i in self.scales:
