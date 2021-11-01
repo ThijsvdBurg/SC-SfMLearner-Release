@@ -6,7 +6,7 @@ python train.py $TRAIN_SET \
 --folder-type sequence \
 --resnet-layers 18 \
 --num-scales 1 \
--s0.1 -c0.5 --epochs 50 \
+-s0.1 -c0.5 --epochs 1 \
 --with-ssim 1 \
 --with-mask 1 \
 --with-auto-mask 1 \
@@ -14,8 +14,8 @@ python train.py $TRAIN_SET \
 --log-output \
 --dataset nyu \
 --name r18_husky \
---img-width 480 \
---img-height 640 \
+--img-width 640 \
+--img-height 480 \
 --pretrained-pose $POSE_NET \
 --pretrained-disp $DISP_NET
 
