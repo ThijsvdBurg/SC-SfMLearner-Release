@@ -13,7 +13,7 @@ python train.py $TRAIN_SET \
 --with-pretrain 1 \
 --log-output \
 --dataset nyu \
---name r18_husky_832_256_pretrained_nyu_disp_kitti_pose_3ep \
+--name r18_husky_832_256_pretrained_imagenet_pose_3ep \
 --img-width 832 \
 --img-height 256 \
 #--pretrained-pose $POSE_NET \
