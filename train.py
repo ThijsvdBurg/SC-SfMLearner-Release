@@ -86,6 +86,7 @@ def main():
         for i in range(3):
             output_writers.append(SummaryWriter(args.save_path/'valid'/str(i)))
 
+
     # Data loading code
     print("normalize will be called next")
     normalize = custom_transforms.Normalize(mean=[0.45, 0.45, 0.45],
