@@ -3,6 +3,7 @@ import numpy as np
 from imageio import imread
 from path import Path
 import random
+import torchvision
 import os
 
 def load_as_float(path):
@@ -66,7 +67,12 @@ class SequenceFolder(data.Dataset):
         else:
             intrinsics = np.copy(sample['intrinsics'])
 
-        print('\n \n \n tgt img and refimg type is: \n \n',type(tgt_img),type(ref_imgs))
+        # print('\n \n \n tgt img and refimgs type is: \n \n',type(tgt_img),type(ref_imgs))
+
+        for ref_img in ref_imgs:
+            print('\n \n \n img and refimg type is: \n \n',type(ref_img))
+            print(tgt_img.shape,ref_img.shape)
+
         return tgt_img, ref_imgs, intrinsics, np.linalg.inv(intrinsics)
 
     def __len__(self):
