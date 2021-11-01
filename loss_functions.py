@@ -61,6 +61,7 @@ def compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, re
     geometry_loss = 0
 
     num_scales = min(len(tgt_depth), max_scales)
+
     ################################################################################################################
     # print('\n computing photo and geometry loss:')
     # print('\n numscales:')

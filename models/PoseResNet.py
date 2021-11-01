@@ -37,7 +37,6 @@ class PoseDecoder(nn.Module):
 
         cat_features = [self.relu(self.convs["squeeze"](f)) for f in last_features]
 
-        print('line 40 poseresnet: cat_features size:',cat_features.shape,'\n type:', type(cat_features))
         cat_features = torch.cat(cat_features, 1)
 
         out = cat_features
@@ -64,8 +63,8 @@ class PoseResNet(nn.Module):
         pass
 
     def forward(self, img1, img2):
-        print('line 67 poseresnet: img1 size:',img1.shape,'\n type:', type(img1))
-        print('line 68 poseresnet: cat_features size:',img1.shape,'\n type:', type(img1))
+        # print('line 67 poseresnet: img1 size:',img1.shape,'\n type:', type(img1))
+        # print('line 68 poseresnet: cat_features size:',img1.shape,'\n type:', type(img1))
 
         x = torch.cat([img1,img2],1)
         features = self.encoder(x)
@@ -84,4 +83,4 @@ if __name__ == "__main__":
 
     pose = model(tgt_img, ref_imgs[0])
 
-    print(pose.size())
+    # print(pose.size())

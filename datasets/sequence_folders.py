@@ -21,7 +21,7 @@ class SequenceFolder(data.Dataset):
         transform functions must take in a list a images and a numpy array (usually intrinsics matrix)
     """
 
-    def __init__(self, root, seed=None, train=True, sequence_length=3, transform=None, skip_frames=1, dataset='kitti'):
+    def __init__(self, root, seed=None, train=True, sequence_length=3, transform=None, skip_frames=1, dataset='kitti', imgh=480, imgw=640):
         np.random.seed(seed)
         random.seed(seed)
         self.root = Path(root)
@@ -33,6 +33,8 @@ class SequenceFolder(data.Dataset):
         self.dataset = dataset
         self.k = skip_frames
         self.crawl_folders(sequence_length)
+        self.imgh = imgh
+        self.imgw = imgw
 
     def crawl_folders(self, sequence_length):
         # k skip frames
@@ -60,19 +62,33 @@ class SequenceFolder(data.Dataset):
         sample = self.samples[index]
         tgt_img = load_as_float(sample['tgt'])
         ref_imgs = [load_as_float(ref_img) for ref_img in sample['ref_imgs']]
+        # print('\n \n \n tgt img and refimgs type is: \n \n',type(tgt_img),type(ref_imgs))
         if self.transform is not None:
             imgs, intrinsics = self.transform([tgt_img] + ref_imgs, np.copy(sample['intrinsics']))
+            # print('\n \n \n imgs type is: \n \n',type(imgs))
+            # print('\n \n \n imgs[1] is: \n \n',imgs[1])
             tgt_img = imgs[0]
             ref_imgs = imgs[1:]
         else:
             intrinsics = np.copy(sample['intrinsics'])
 
         # print('\n \n \n tgt img and refimgs type is: \n \n',type(tgt_img),type(ref_imgs))
-
+        ########################################################################################################
+        img_reshape = torchvision.transforms.Resize((self.imgh,self.imgw))
+        tgt_img = img_reshape(tgt_img)
+        # print('\n \n \n tgtimg resized shape: ' , tgt_img.shape)
+        # ref_imgs = img_reshape(ref_imgs)
+        # print('\n \n \n refimg0 resized shape: ' , ref_imgs[0].shape)
+        i=0
         for ref_img in ref_imgs:
-            print('\n \n \n img and refimg type is: \n \n',type(ref_img))
-            print(tgt_img.shape,ref_img.shape)
+            # print('\n \n \n refimg type is: \n \n',type(ref_img))
+            # print(tgt_img.shape,ref_img.shape)
+            ref_img = img_reshape(ref_img)
+            ref_imgs[i] = ref_img
+            i=i+1
 
+        # print(ref_imgs)
+        ########################################################################################################
         return tgt_img, ref_imgs, intrinsics, np.linalg.inv(intrinsics)
 
     def __len__(self):

@@ -89,7 +89,7 @@ class DepthDecoder(nn.Module):
         x = input_features[-1]
 
         ################################################################################################################
-        print('line 92 dispresnet: x size:',x.shape,'\n type:', type(x))   #line 92 dispresnet: x size: torch.Size([4, 512, 23, 40])
+        # print('line 92 dispresnet: x size:',x.shape,'\n type:', type(x))   #line 92 dispresnet: x size: torch.Size([4, 512, 23, 40])
         ################################################################################################################
         for i in range(4, -1, -1):
             x = self.convs[("upconv", i, 0)](x)
@@ -148,7 +148,5 @@ if __name__ == "__main__":
     ref_imgs = [torch.randn(B, 3, 256, 832).cuda() for i in range(2)]
 
     tgt_depth = model(tgt_img)
-
-    print(tgt_depth[0].size())
 
 
