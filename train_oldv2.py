@@ -6,13 +6,10 @@ from path import Path
 
 import numpy as np
 import torch
-##########################################################################################################
-import torchvision
-##########################################################################################################
 import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
-import cv2
+
 import models
 
 import custom_transforms
@@ -30,7 +27,7 @@ parser.add_argument('data', metavar='DIR', help='path to dataset')
 parser.add_argument('--folder-type', type=str, choices=['sequence', 'pair'], default='sequence', help='the dataset type to train')
 parser.add_argument('--sequence-length', type=int, metavar='N', help='sequence length for training', default=3)
 # parser.add_argument('-j', '--workers', default=4, type=int, metavar='N', help='number of data loading workers')
-parser.add_argument('-j', '--workers', default=2, type=int, metavar='N', help='number of data loading workers')
+parser.add_argument('-j', '--workers', default=1, type=int, metavar='N', help='number of data loading workers')
 parser.add_argument('--epochs', default=200, type=int, metavar='N', help='number of total epochs to run')
 parser.add_argument('--epoch-size', default=0, type=int, metavar='N', help='manual epoch size (will match dataset size if not set)')
 parser.add_argument('-b', '--batch-size', default=4, type=int, metavar='N', help='mini-batch size')
@@ -91,11 +88,12 @@ def main():
         for i in range(3):
             output_writers.append(SummaryWriter(args.save_path/'valid'/str(i)))
 
+
     # Data loading code
-    # print("normalize will be called next")
+    print("normalize will be called next")
     normalize = custom_transforms.Normalize(mean=[0.45, 0.45, 0.45],
                                             std=[0.225, 0.225, 0.225])
-    # print("train_transform will be composed with numerous subcomponents, no input")
+    print("train_transform will be composed with numerous subcomponents, no input")
     train_transform = custom_transforms.Compose([
         custom_transforms.RandomHorizontalFlip(),
         custom_transforms.RandomScaleCrop(),
@@ -113,16 +111,13 @@ def main():
             seed=args.seed,
             train=True,
             sequence_length=args.sequence_length,
-            dataset=args.dataset,
-            args.img_width,
-            args.img_height
+            dataset=args.dataset
         )
     else:
         train_set = PairFolder(
             args.data,
             seed=args.seed,
             train=True,
-            # print("transform = train_transform is called, no inputs"),
             transform=train_transform
         )
 
@@ -144,8 +139,6 @@ def main():
             train=False,
             sequence_length=args.sequence_length,
             dataset=args.dataset
-            args.img_width,
-            args.img_height
         )
     print('{} samples found in {} train scenes'.format(len(train_set), len(train_set.scenes)))
     print('{} samples found in {} validation scenes'.format(len(val_set), len(val_set.scenes)))
@@ -154,15 +147,15 @@ def main():
         train_set, # dataset from which to load the data.
         batch_size=args.batch_size, # how many samples per batch to load (default: 1).
         shuffle=True, # set to True to have the data reshuffled at every epoch
-        num_workers=args.workers,   # how many subprocesses to use for data loading.
-                                    # 0 means that the data will be loaded in the main process. (default: 0)
+        # num_workers=args.workers,   # how many subprocesses to use for data loading.
+        #                             0 means that the data will be loaded in the main process. (default: 0)
         pin_memory=True) # If True, the data loader will copy Tensors into CUDA pinned memory before returning them.
 
     val_loader = torch.utils.data.DataLoader(
         val_set,
         batch_size=args.batch_size,
         shuffle=False,
-        num_workers=args.workers,
+        # num_workers=args.workers,
         pin_memory=True)
 
     if args.epoch_size == 0:
@@ -212,11 +205,13 @@ def main():
     logger = TermLogger(n_epochs=args.epochs, train_size=min(len(train_loader), args.epoch_size), valid_size=len(val_loader))
     logger.epoch_bar.start()
 
+    print('beginning epochs')
     for epoch in range(args.epochs):
         logger.epoch_bar.update(epoch)
 
         # train for one epoch
         logger.reset_train_bar()
+        print('beginning training')
         train_loss = train(args, train_loader, disp_net, pose_net, optimizer, args.epoch_size, logger, training_writer)
         logger.train_writer.write(' * Avg Loss : {:.3f}'.format(train_loss))
 
@@ -274,23 +269,17 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
         log_losses = i > 0 and n_iter % args.print_freq == 0
 
         ################################################################################################################
-        # show intrinsics properties
-        # change with every image
+        # # show intrinsics properties
+        # # change with every image
         # print(intrinsics)
         # print('\n intrinsics datatype: \n')
         # print(type(intrinsics))
-        # print('\n tgt_img datatype: \n')
-        # print(type(tgt_img))
+        # print('\n ref_img datatype: \n')
+        # print(type(ref_imgs))
         # print('\n plot tgt_img:')
         # show_images(tgt_img)
-        #test_number = int(input("Enter a number: "))
-        #print ("The number you entered is: ", test_number)
-        ################################################################################################################
-        ################################################################################################################
-        # img_reshape = torchvision.transforms.Resize((args.img_height,args.img_width))
-
-        # tgt_img = img_reshape(tgt_img)
-
+        # test_number = int(input("Enter a number: "))
+        # print ("The number you entered is: ", test_number)
         ################################################################################################################
 
         # measure data loading time
@@ -302,8 +291,8 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
         intrinsics = intrinsics.to(device)
 
         # compute output
-        tgt_depth, ref_depths = compute_depth(args, disp_net, tgt_img, ref_imgs)
-        poses, poses_inv = compute_pose_with_inv(args, pose_net, tgt_img, ref_imgs)
+        tgt_depth, ref_depths = compute_depth(disp_net, tgt_img, ref_imgs)
+        poses, poses_inv = compute_pose_with_inv(pose_net, tgt_img, ref_imgs)
 
         ################################################################################################################
         # print('\n pose: \n')
@@ -314,33 +303,23 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
         # print('ref_depths shape is: \n',ref_depths.shape)
         ################################################################################################################
         ################################################################################################################
-
-
-
-
-
-
-
-
         ################################################################################################################
-        print('tgt_img size and type: ',tgt_img.shape, type(tgt_img))
-        ################################################################################################################
-
-
-
-
-
-
-
-
-        loss_1, loss_3 = compute_photo_and_geometry_loss(args, tgt_img, ref_imgs, intrinsics, tgt_depth, ref_depths,
+        loss_1, loss_3 = compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, ref_depths,
                                                          poses, poses_inv, args.num_scales, args.with_ssim,
                                                          args.with_mask, args.with_auto_mask, args.padding_mode)
-        loss_2 = compute_smooth_loss(args, tgt_depth, tgt_img, ref_depths, ref_imgs)
-
+        loss_2 = compute_smooth_loss(tgt_depth, tgt_img, ref_depths, ref_imgs)
+        ################################################################################################################
+        ################################################################################################################
+        ################################################################################################################
         loss = w1*loss_1 + w2*loss_2 + w3*loss_3
 
-        print("The loss_1 and loss_3 are:", loss_1, loss_3)
+        ################################################################################################################
+        # ask for input to interrupt script execution
+
+        # print("The loss_1 and loss_3 are:", loss_1, loss_3)
+        # test_number = int(input("Enter a number: "))
+        # print ("The number you entered is: ", test_number)
+        ################################################################################################################
 
         if log_losses:
             train_writer.add_scalar('photometric_error', loss_1.item(), n_iter)
@@ -417,7 +396,7 @@ def validate_without_gt(args, val_loader, disp_net, pose_net, epoch, logger, out
                                                          poses, poses_inv, args.num_scales, args.with_ssim,
                                                          args.with_mask, False, args.padding_mode)
 
-        loss_2 = compute_smooth_loss(args, tgt_depth, tgt_img, ref_depths, ref_imgs)
+        loss_2 = compute_smooth_loss(tgt_depth, tgt_img, ref_depths, ref_imgs)
 
         loss_1 = loss_1.item()
         loss_2 = loss_2.item()
@@ -498,16 +477,21 @@ def validate_with_gt(args, val_loader, disp_net, epoch, logger, output_writers=[
     return errors.avg, error_names
 
 
-def compute_depth(args ,disp_net, tgt_img, ref_imgs):
-
+def compute_depth(disp_net, tgt_img, ref_imgs):
     tgt_depth = [1/disp for disp in disp_net(tgt_img)]
 
     ref_depths = []
     for ref_img in ref_imgs:
-        img_reshape = torchvision.transforms.Resize((args.img_height,args.img_width))
-        ref_img = img_reshape(ref_img)
-        # print(' \n ref_img shape is: \n',ref_img.shape)
+
+
         ################################################################################################################
+        # print(" \n ref_imgs datatype is: \n")
+
+        # print(type(ref_imgs))
+        # print(ref_imgs)
+        # print(count.ref_imgs)
+        ################################################################################################################
+
 
         ref_depth = [1/disp for disp in disp_net(ref_img)]
         ref_depths.append(ref_depth)
@@ -515,13 +499,10 @@ def compute_depth(args ,disp_net, tgt_img, ref_imgs):
     return tgt_depth, ref_depths
 
 
-def compute_pose_with_inv(args, pose_net, tgt_img, ref_imgs):
+def compute_pose_with_inv(pose_net, tgt_img, ref_imgs):
     poses = []
     poses_inv = []
-
     for ref_img in ref_imgs:
-        img_reshape = torchvision.transforms.Resize((args.img_height,args.img_width))
-        ref_img = img_reshape(ref_img)
         poses.append(pose_net(tgt_img, ref_img))
         poses_inv.append(pose_net(ref_img, tgt_img))
 

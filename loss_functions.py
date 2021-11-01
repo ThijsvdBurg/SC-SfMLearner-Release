@@ -55,12 +55,13 @@ compute_ssim_loss = SSIM().to(device)
 
 # photometric loss
 # geometry consistency loss
-def compute_photo_and_geometry_loss(args, tgt_img, ref_imgs, intrinsics, tgt_depth, ref_depths, poses, poses_inv, max_scales, with_ssim, with_mask, with_auto_mask, padding_mode):
+def compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, ref_depths, poses, poses_inv, max_scales, with_ssim, with_mask, with_auto_mask, padding_mode):
 
     photo_loss = 0
     geometry_loss = 0
 
     num_scales = min(len(tgt_depth), max_scales)
+
     ################################################################################################################
     # print('\n computing photo and geometry loss:')
     # print('\n numscales:')
@@ -79,8 +80,8 @@ def compute_photo_and_geometry_loss(args, tgt_img, ref_imgs, intrinsics, tgt_dep
         ################################################################################################################
         ################################################################################################################
         # print('line 80 lossfunc ref_img size and type: ',ref_img.shape, type(ref_img))
-        img_reshape = torchvision.transforms.Resize((args.img_height,args.img_width))
-        ref_img = img_reshape(ref_img)
+        # img_reshape = torchvision.transforms.Resize((args.img_height,args.img_width))
+        # ref_img = img_reshape(ref_img)
         # print('line 83 lossfunc ref_img size and type: ',ref_img.shape, type(ref_img))
         ################################################################################################################
         ################################################################################################################
@@ -161,7 +162,7 @@ def mean_on_mask(diff, valid_mask):
     return mean_value
 
 
-def compute_smooth_loss(args, tgt_depth, tgt_img, ref_depths, ref_imgs):
+def compute_smooth_loss(tgt_depth, tgt_img, ref_depths, ref_imgs):
     def get_smooth_loss(disp, img):
         """Computes the smoothness loss for a disparity image
         The color image is used for edge-aware smoothness
@@ -189,8 +190,8 @@ def compute_smooth_loss(args, tgt_depth, tgt_img, ref_depths, ref_imgs):
     for ref_depth, ref_img in zip(ref_depths, ref_imgs):
 
         ################################################################################################################
-        img_reshape = torchvision.transforms.Resize((args.img_height,args.img_width))
-        ref_img = img_reshape(ref_img)
+        # img_reshape = torchvision.transforms.Resize((args.img_height,args.img_width))
+        # ref_img = img_reshape(ref_img)
         ################################################################################################################
 
         loss += get_smooth_loss(ref_depth[0], ref_img)
