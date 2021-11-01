@@ -16,7 +16,7 @@ python train.py $TRAIN_SET \
 --name r18_husky_640_480_pretrained_nyu_disp_kitti_pose_3ep \
 --img-width 640 \
 --img-height 480 \
---pretrained-pose $POSE_NET \
---pretrained-disp $DISP_NET
+#--pretrained-pose $POSE_NET \
+#--pretrained-disp $DISP_NET
 
 # -b16 -s0.1 -c0.5 --epoch-size 0 --epochs 50 \
