@@ -311,7 +311,7 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
 
         loss_1, loss_3 = compute_photo_and_geometry_loss(tgt_img, ref_imgs, intrinsics, tgt_depth, ref_depths, poses,
                                                          poses_inv, args.num_scales, args.with_ssim,
-                                                         args.with_mask, args.with_auto_mask, args.padding_mode)
+                                                         args.with_mask, args.with_auto_mask, args.padding_mode, args.img_height, args.img_width)
 
         loss_2 = compute_smooth_loss(tgt_depth, tgt_img, ref_depths, ref_imgs)
 
