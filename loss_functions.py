@@ -143,11 +143,12 @@ def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsi
 
     if with_mask == True:
         weight_mask = (1 - diff_depth)
+        print('weight mask shape',weight_mask.shape)
         diff_img = diff_img * weight_mask
-        print('line 147 loss func mask is diff_img is type and shape', type(diff_img))
-        print(diff_img.shape)
+        # print('line 147 loss func mask is diff_img is type and shape', type(diff_img))
+        # print(diff_img.shape)
         # diff_img_np = tensor2array(diff_img)
-        print(diff_img)
+        # print(diff_img)
         # disp = (255*tensor2array(diff_img, max_value=None, colormap='rainbow')).astype(np.uint8)
         # disp_transpose = np.transpose(disp, (1,2,0))
         # imsave('{}_mask{}'.format('001', '.png'), disp_transpose)
