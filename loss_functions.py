@@ -145,6 +145,11 @@ def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsi
         weight_mask = (1 - diff_depth)
         diff_img = diff_img * weight_mask
         print('line 147 loss func mask is diff_img is type and shape', type(diff_img))
+        print(diff_img.shape)
+        diff_img_np = diff_img
+        # diff_img_np.detach().numpy()
+        show_images(diff_img_np)
+
 
     # compute all loss
     reconstruction_loss = mean_on_mask(diff_img, valid_mask)
@@ -246,20 +251,40 @@ def compute_errors(gt, pred, dataset):
     return [metric.item() / batch_size for metric in [abs_diff, abs_rel, sq_rel, a1, a2, a3]]
 
 
-def show_images(tgt_img):
+def show_images(img):
+    import torchvision.transforms.functional as F
+    import matplotlib.pyplot
+
+    import cv2
 
     # simulate data
     # data = np.random.rand(50, 64)
+    # [3, 3, 480, 640]
+    b, _, h, w = img.size()
+    print('batch size',b)
+    print('height',h)
+    print('width',w)
+    img2=img[0].squeeze()
+    print('squeeze size',img2.size())
 
+    img3=img2.permute(1,2,0)
+
+    # plt.figure(figsize = (h, w))
+    img4=img3.cpu().detach().numpy()
+    print(type(img4))
+    # cv2.imshow('diffimg',img4)
+    matplotlib.pyplot.imshow(img4)
+    # plt.imshow()
+    matplotlib.pyplot.show()
     # create figure
-    fig = plt.figure(figsize=(256,320))
+    # fig = plt.figure(figsize=(256,320))
 
-    tgt_img_np = tgt_img.view(256,320,3).numpy()
+    # img_np = img.view(480,640,3).numpy()
 
-    randtensor = torch.rand([4,4,3])
+    # randtensor = torch.rand([4,4,3])
 
-    type(tgt_img_np)
-    plt.imshow(randtensor)
+    # type(img_np)
+    # plt.imshow(img_np)
 
     # loop over images
     # for i in range(1):
