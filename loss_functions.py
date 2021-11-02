@@ -145,6 +145,9 @@ def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsi
         weight_mask = (1 - diff_depth)
         diff_img = diff_img * weight_mask
         print('line 147 loss func mask is diff_img is type and shape', type(diff_img))
+        print(diff_img.shape)
+        show_images(diff_img)
+
 
     # compute all loss
     reconstruction_loss = mean_on_mask(diff_img, valid_mask)
@@ -246,20 +249,23 @@ def compute_errors(gt, pred, dataset):
     return [metric.item() / batch_size for metric in [abs_diff, abs_rel, sq_rel, a1, a2, a3]]
 
 
-def show_images(tgt_img):
+def show_images(img):
 
     # simulate data
     # data = np.random.rand(50, 64)
+    # [3, 3, 480, 640]
+    batch, _, h, w = img.shape
 
+    print('batch size',batch)
     # create figure
     fig = plt.figure(figsize=(256,320))
 
-    tgt_img_np = tgt_img.view(256,320,3).numpy()
+    img_np = img.view(480,640,3).numpy()
 
-    randtensor = torch.rand([4,4,3])
+    # randtensor = torch.rand([4,4,3])
 
-    type(tgt_img_np)
-    plt.imshow(randtensor)
+    type(img_np)
+    plt.imshow(img_np)
 
     # loop over images
     # for i in range(1):
