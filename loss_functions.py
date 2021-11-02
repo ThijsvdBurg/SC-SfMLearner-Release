@@ -8,8 +8,8 @@ import math
 ################################################################################################################
 # for intermediate data visualisation
 import matplotlib.pyplot as plt
-import numpy
-import torchvision #for resizing tensors
+# import numpy
+from utils import tensor2array
 ################################################################################################################
 
 
@@ -146,7 +146,7 @@ def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsi
         diff_img = diff_img * weight_mask
         print('line 147 loss func mask is diff_img is type and shape', type(diff_img))
         print(diff_img.shape)
-        diff_img_np = diff_img
+        diff_img_np = tensor2array(diff_img)
         # diff_img_np.detach().numpy()
         show_images(diff_img_np)
 
