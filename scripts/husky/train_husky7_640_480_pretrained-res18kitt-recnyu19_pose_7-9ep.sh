@@ -1,6 +1,6 @@
 TRAIN_SET=datasets/tu_delft_husky/zed/
-POSE_NET=checkpoints/husky_tu_delft_r18_best/exp_pose_model_best.pth.tar
-DISP_NET=checkpoints/husky_tu_delft_r18_best/dispnet_model_best.pth.tar
+POSE_NET=checkpoints/husky_tu_delft_r18_best_6_epochs/exp_pose_model_best.pth.tar
+DISP_NET=checkpoints/husky_tu_delft_r18_best_6_epochs/dispnet_model_best.pth.tar
 
 python train.py $TRAIN_SET \
 --folder-type sequence \
