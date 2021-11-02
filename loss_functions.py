@@ -144,6 +144,7 @@ def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsi
     if with_mask == True:
         weight_mask = (1 - diff_depth)
         diff_img = diff_img * weight_mask
+        print('line 147 loss func mask is diff_img is type and shape', type(diff_img))
 
     # compute all loss
     reconstruction_loss = mean_on_mask(diff_img, valid_mask)
