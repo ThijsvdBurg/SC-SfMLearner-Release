@@ -1,6 +1,7 @@
 TRAIN_SET=datasets/tu_delft_husky/zed/
-POSE_NET=checkpoints/husky_tu_delft_r18_best_6_epochs/exp_pose_model_best.pth.tar
-DISP_NET=checkpoints/husky_tu_delft_r18_best_6_epochs/dispnet_model_best.pth.tar
+RESNET_FOLDER=checkpoints/r18_husky_832_256_pretrained_kitti_256_disp_and_pose//11-03-10_00_6ep
+POSE_NET=$RESNET_FOLDER/exp_pose_model_best.pth.tar
+DISP_NET=$RESNET_FOLDER/dispnet_model_best.pth.tar
 
 python train.py $TRAIN_SET \
 --folder-type sequence \
@@ -13,9 +14,9 @@ python train.py $TRAIN_SET \
 --with-pretrain 1 \
 --log-output \
 --dataset nyu \
---name r18_husky_640_480_pretrained_nyu_disp_kitti_pose_7-9ep \
---img-width 640 \
---img-height 480 \
+--name r18_husky_832_256_pretrained_kitti_256_disp_and_pose \
+--img-width 832 \
+--img-height 256 \
 --pretrained-pose $POSE_NET \
 --pretrained-disp $DISP_NET
 
