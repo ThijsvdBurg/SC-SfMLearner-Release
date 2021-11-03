@@ -1,12 +1,12 @@
 
 # points to location of RGB images
-INPUT_DIR=datasets/tu_delft_husky/zed/testingseq
+INPUT_DIR=datasets/tu_delft_husky/testingseq001
 
 # points to directory to output resulting depth images
-OUTPUT_DIR=results/r18_husky_832_256_pretrained_kitti_256_disp_and_pose/3ep
+OUTPUT_DIR=results/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/6ep
 
 # points to trained model
-DISPNET=checkpoints/r18_husky_832_256_pretrained_kitti_256_disp_and_pose/3ep/dispnet_model_best.pth.tar
+DISPNET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/6ep/dispnet_model_best.pth.tar
 
 # actually run the inference on each image
 python3 run_inference.py \
@@ -16,8 +16,9 @@ python3 run_inference.py \
 --output-dir $OUTPUT_DIR \
 --output-disp \
 --output-depth \
---img-height 832 \
---img-width 256
+--img-width 480 \
+--img-height 640
+
 
 
 
