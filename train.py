@@ -12,13 +12,17 @@ import torch.utils.data
 
 import models
 
+import os
+
 import custom_transforms
+
 from utils import tensor2array, save_checkpoint
 from datasets.sequence_folders import SequenceFolder
 from datasets.pair_folders import PairFolder
 from loss_functions import compute_smooth_loss, compute_photo_and_geometry_loss, compute_errors, show_images
 from logger import TermLogger, AverageMeter
 from tensorboardX import SummaryWriter
+
 
 parser = argparse.ArgumentParser(description='Structure from Motion Learner training on KITTI and CityScapes Dataset',
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -173,18 +177,27 @@ def main():
 
     # load parameters
     if args.pretrained_disp:
-        print("=> using pre-trained weights for DispResNet")
+
         # to allow CPU training, map_location is added to torch.load()
         # weights = torch.load(args.pretrained_disp)
-        weights = torch.load(args.pretrained_disp, map_location=device)
-        disp_net.load_state_dict(weights['state_dict'], strict=False)
+        if os.access(args.pretrained_disp,os.R_OK):
+            print("=> using pre-trained weights for DispResNet")
+            weights = torch.load(args.pretrained_disp, map_location=device)
+            disp_net.load_state_dict(weights['state_dict'], strict=False)
+        else:
+            print(args.pretrained_disp,' is not readable')
+
 
     if args.pretrained_pose:
-        print("=> using pre-trained weights for PoseResNet")
+
         # to allow CPU training, map_location is added to torch.load()
         # weights = torch.load(args.pretrained_pose)
-        weights = torch.load(args.pretrained_pose, map_location=device)
-        pose_net.load_state_dict(weights['state_dict'], strict=False)
+        if os.access(args.pretrained_pose, os.R_OK):
+            print("=> using pre-trained weights for PoseResNet")
+            weights = torch.load(args.pretrained_pose, map_location=device)
+            pose_net.load_state_dict(weights['state_dict'], strict=False)
+        else:
+            print(args.pretrained_pose,' is not readable')
 
     disp_net = torch.nn.DataParallel(disp_net)
     pose_net = torch.nn.DataParallel(pose_net)
