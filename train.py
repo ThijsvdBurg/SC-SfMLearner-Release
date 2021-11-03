@@ -46,7 +46,7 @@ parser.add_argument('-p', '--photo-loss-weight', type=float, help='weight for ph
 parser.add_argument('-s', '--smooth-loss-weight', type=float, help='weight for disparity smoothness loss', metavar='W', default=0.1)
 parser.add_argument('-c', '--geometry-consistency-weight', type=float, help='weight for depth consistency loss', metavar='W', default=0.5)
 parser.add_argument('--with-ssim', type=int, default=1, help='with ssim or not')
-parser.add_argument('--with-mask', type=int, default=1, help='with the the mask for moving objects and occlusions or not')
+parser.add_argument('--with-mask', type=int, default=1, help='with the mask for moving objects and occlusions or not')
 parser.add_argument('--with-auto-mask', type=int,  default=0, help='with the the mask for stationary points')
 parser.add_argument('--with-pretrain', type=int,  default=1, help='with or without imagenet pretrain for resnet')
 parser.add_argument('--dataset', type=str, choices=['kitti', 'nyu'], default='kitti', help='the dataset to train')
