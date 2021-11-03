@@ -16,7 +16,7 @@ python train.py $TRAIN_SET \
 --dataset nyu \
 --name r18_husky_640_360_pretrained_nyu_disp_and_kitt256_pose \
 --img-width 640 \
---img-height 363 \
+--img-height 361 \
 --pretrained-pose $POSE_NET \
 --pretrained-disp $DISP_NET
 
