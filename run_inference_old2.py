@@ -59,8 +59,8 @@ def main():
         img = imread(file).astype(np.float32)
 
         h, w, _ = img.shape
-        # print('\n height is', h)
-        # print('\n width is', w)
+        print('\n height is', h)
+        print('\n width is', w)
         if (not args.no_resize) and (h != args.img_height or w != args.img_width):
 
             # imresize was deprecated in scipy.misc so i cold either downgrade scipy or
@@ -69,17 +69,17 @@ def main():
 
             # img = cv2.resize(img, (args.img_height, args.img_width)).astype(np.float32)
             img2 = cv2.resize(img, (args.img_width, args.img_height)).astype(np.float32)
-            # print('\n np img size is ',img.shape)
+            print('\n np img size is ',img.shape)
         #############################################################################################
         img_transpose = np.transpose(img2, (2, 0, 1))
-        # print('\n np img_transpose size is ',img_transpose.shape)
+        print('\n np img_transpose size is ',img_transpose.shape)
         tensor_img = torch.from_numpy(img_transpose).unsqueeze(0)
 
-        # print('\n tensor_img size is ',tensor_img.shape)
+        print('\n tensor_img size is ',tensor_img.shape)
         tensor_img = ((tensor_img/255 - 0.45)/0.225).to(device)
         #############################################################################################
         output = disp_net(tensor_img)[0]
-        # print('dispnet output size is ',output.shape)
+        print('dispnet output size is ',output.shape)
         # print max output value
         # print('max output disparity value is: {}'.format(output.max().item()))
 
@@ -92,9 +92,9 @@ def main():
             disp_transpose = np.transpose(disp, (1,2,0))
             # disp_transpose = np.transpose(disp, (2,1,0))
             ###########################################################################################################
-            # print('np disp type is',disp.shape)
+            print('np disp type is',disp.shape)
             # disp.shape
-            # print('np disp_transpose size is', disp_transpose.shape)
+            print('np disp_transpose size is', disp_transpose.shape)
 
             # disp_transpose.shape
             # imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), np.transpose(disp, (1, 2, 0)))
