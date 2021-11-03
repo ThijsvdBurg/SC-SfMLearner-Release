@@ -3,7 +3,7 @@
 INPUT_DIR=datasets/tu_delft_husky/testingseq001
 
 # points to directory to output resulting depth images
-OUTPUT_DIR=results/r18_husky_832_256_pretrained_kitti_256_disp_and_pose/6ep/testingseq001
+OUTPUT_DIR=results/testingseq001/r18_husky_832_256_pretrained_kitti_256_disp_and_pose/6ep
 
 # points to trained model
 DISPNET=checkpoints/r18_husky_832_256_pretrained_kitti_256_disp_and_pose/6ep/dispnet_model_best.pth.tar
