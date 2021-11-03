@@ -1,5 +1,5 @@
 TRAIN_SET=datasets/tu_delft_husky/zed/
-RESNET_FOLDER=checkpoints/resnet18_depth_256
+RESNET_FOLDER=checkpoints/r18_husky_1280_960_pretrained_kitti_256_disp_and_pose/6ep
 POSE_NET=$RESNET_FOLDER/exp_pose_model_best.pth.tar
 DISP_NET=$RESNET_FOLDER/dispnet_model_best.pth.tar
 
