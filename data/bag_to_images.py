@@ -31,14 +31,16 @@ def main():
     bag = rosbag.Bag(args.bag_file, "r")
     bridge = CvBridge()
     count = 0
+    if os.access(args.output_dir,os.W_OK)==True:
+        for topic, msg, t in bag.read_messages(topics=[args.image_topic, ]):
+            cv_image = bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
+            # intrinsics =
+            cv2.imwrite(os.path.join(args.output_dir, "%06i.png" % count), cv_image)
+            print("Wrote image %i" % count)
+            count+=1
+    else:
+	    print('target dir not writable')
 
-    for topic, msg, t in bag.read_messages(topics=[args.image_topic, ]):
-        cv_image = bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
-        # intrinsics =
-        cv2.imwrite(os.path.join(args.output_dir, "%06i.png" % count), cv_image)
-        print("Wrote image %i" % count)
-
-        count += 1
 
     bag.close()
 
