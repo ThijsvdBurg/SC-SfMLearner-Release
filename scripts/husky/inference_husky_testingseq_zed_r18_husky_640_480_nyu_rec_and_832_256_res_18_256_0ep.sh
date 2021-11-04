@@ -2,7 +2,7 @@
 INPUT_DIR=datasets/tu_delft_husky/testingseq
 
 # points to directory to output resulting depth images
-OUTPUT_DIR=results/testingseq001/rectified_nyu_r18
+OUTPUT_DIR=results/testingseq/rectified_nyu_r18
 
 # points to trained model
 DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
@@ -22,7 +22,7 @@ python3 run_inference.py \
 # --dataset-list $LIST_DIR
 
 # points to directory to output resulting depth images
-OUTPUT_DIR=results/resnet18_depth_256/testingseq001
+OUTPUT_DIR=results/testingseq/resnet18_depth_256
 
 # points to trained model
 DISPNET=checkpoints/resnet18_depth_256/dispnet_model_best.pth.tar
