@@ -1,9 +1,8 @@
-
 # points to location of RGB images
-INPUT_DIR=datasets/tu_delft_husky/testingseq001
+INPUT_DIR=datasets/tu_delft_husky/testingseq
 
 # points to directory to output resulting depth images
-OUTPUT_DIR=results/testingseq001/r18_husky_832_256_pretrained_kitti_256_disp_and_pose/6ep
+OUTPUT_DIR=results/testingseq/r18_husky_832_256_pretrained_kitti_256_disp_and_pose/6ep
 
 # points to trained model
 DISPNET=checkpoints/r18_husky_832_256_pretrained_kitti_256_disp_and_pose/6ep/dispnet_model_best.pth.tar
