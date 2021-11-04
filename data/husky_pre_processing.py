@@ -20,6 +20,7 @@ def main():
     args = parser.parse_args()
 
     print(args.input_dir)
+
     dl_number=[]
     for i in range(1,10,1):
         dl_number.append(i)
@@ -32,7 +33,7 @@ def main():
     for i in range(0,10,1):
             for x in dl_number:
                     filename="0000{0}{1}.png".format(i,x)
-                    rm_path=os.path.join(args.in_dir,filename)
+                    rm_path=os.path.join(args.input_dir,filename)
                     print(rm_path)
                     if os.access(rm_path, os.R_OK):
                             os.remove(rm_path)
