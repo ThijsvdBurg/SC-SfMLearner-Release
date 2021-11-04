@@ -16,8 +16,8 @@ python3 run_inference.py \
 --output-dir $OUTPUT_DIR \
 --output-disp \
 --output-depth \
---img-height 640 \
---img-width 480
+--img-width 640 \
+--img-height 480
 
 
 
