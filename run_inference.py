@@ -109,7 +109,7 @@ def main():
             # depth2 = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
 
             depth3 = 1/output
-            print('')
+            # print('')
             # print('max depth before t2a is: {}'.format(depth3.max().item()))
             # print('min depth before t2a is: {}'.format(depth3.min().item()))
             depth3 = (255*tensor2array(depth3, colormap='bone' )).astype(np.uint8)
