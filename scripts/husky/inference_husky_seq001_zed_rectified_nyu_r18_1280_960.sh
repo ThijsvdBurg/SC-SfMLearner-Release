@@ -2,7 +2,7 @@
 INPUT_DIR=datasets/tu_delft_husky/zed/seq007
 
 # points to directory to output resulting depth images
-OUTPUT_DIR=results/husky_seq007_zed_rectified_nyu_r18_640_480
+OUTPUT_DIR=results/husky_seq007_zed_rectified_nyu_r18_1280_960
 
 # points to trained model
 DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
@@ -14,8 +14,8 @@ python3 run_inference.py \
 --dataset-dir $INPUT_DIR \
 --output-dir $OUTPUT_DIR \
 --output-disp \
---img-width 640 \
---img-height 480 \
+--img-width 1280 \
+--img-height 960 \
 --output-depth
 
 
