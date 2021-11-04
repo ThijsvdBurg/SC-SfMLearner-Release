@@ -7,3 +7,6 @@ tu_delft_husky
 results/
 resultsws husky prelim/
 kitti_mod/
+datasets/kit*
+datasets/nyu*
+datasets/tu_delft*
