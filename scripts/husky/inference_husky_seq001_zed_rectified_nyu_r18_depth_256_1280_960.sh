@@ -18,4 +18,5 @@ python3 run_inference.py \
 --img-width 1280 \
 --output-depth
 
+
 # --dataset-list $LIST_DIR
