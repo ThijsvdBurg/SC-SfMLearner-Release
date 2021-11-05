@@ -119,13 +119,13 @@ def main():
             # print('')
             # print('max depth before t2a is: {}'.format(depth3.max().item()))
             # print('min depth before t2a is: {}'.format(depth3.min().item()))
-            #### !!!!!!!!!!!!!!!!!!!!!!! ########
-            depth3=np.transpose(depth3,(1,0,2))
-            #### !!!!!!!!!!!!!!!!!!!!!!! ########
             depth3 = (255*tensor2array(depth3, colormap='bone')).astype(np.uint8)
             # print('max depth after t2a is: {}'.format(depth3.max().item()))
             # print('min depth after t2a is: {}'.format(depth3.min().item()))
-            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth3, (1, 2, 0)))
+            # imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth3, (1, 2, 0)))
+            #### !!!!!!!!!!!!!!!!!!!!!!! ########
+            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth3, (2, 1, 0)))
+            #### !!!!!!!!!!!!!!!!!!!!!!! ########
 
 
             # depth = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
