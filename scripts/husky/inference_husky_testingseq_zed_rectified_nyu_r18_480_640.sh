@@ -1,6 +1,6 @@
 
 # points to location of RGB images
-INPUT_DIR=datasets/tu_delft_husky/zed/testingseq
+INPUT_DIR=datasets/tu_delft_husky/testingseq
 
 # points to directory to output resulting depth images
 OUTPUT_DIR=results/husky_testingseq_zed_rectified_nyu_r18_480_640
