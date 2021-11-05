@@ -101,36 +101,20 @@ def main():
             # disp_transpose.shape
             # imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), np.transpose(disp, (1, 2, 0)))
 
-
-
             ###########################################################################################################
             imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), disp_transpose)
 
 
         if args.output_depth:
-            # depth = 1/output
-            # depth = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
-            # imsave(output_dir/'{}_depth_max_10{}'.format(file_name, file_ext), np.transpose(depth , (1, 2, 0)))
+            depth = 1/output
+            depth_array1 = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
+            imsave(output_dir/'{}_depth_max_10{}'.format(file_name, file_ext), np.transpose(depth_array1 , (1, 2, 0)))
 
             # imsave(output_dir/'{}_depth{}'.format(file_name, file_ext), np.transpose(depth, (1, 2, 0)))
             # depth2 = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
 
-            depth3 = 1/output
-            # print('')
-            # print('max depth before t2a is: {}'.format(depth3.max().item()))
-            # print('min depth before t2a is: {}'.format(depth3.min().item()))
-            depth3 = (255*tensor2array(depth3, colormap='bone')).astype(np.uint8)
-            # print('max depth after t2a is: {}'.format(depth3.max().item()))
-            # print('min depth after t2a is: {}'.format(depth3.min().item()))
-            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth3, (1, 2, 0)))
-            ### !!!!!!!!!!!!!!!!!!!!!!! ########
-            # imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth3, (2, 1, 0)))
-
-
-
-            # depth = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
-
-            # imsave(output_dir/'{}_depth2{}'.format(file_name, file_ext), np.transpose(depth2, (1, 2, 0)))
+            depth_array2 = (255*tensor2array(depth3, colormap='bone')).astype(np.uint8)
+            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth_array2, (1, 2, 0)))
 
 if __name__ == '__main__':
     main()
