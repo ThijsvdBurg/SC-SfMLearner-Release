@@ -1,10 +1,10 @@
 TRAIN_SET=datasets/tu_delft_husky/zed/
 
 # orig dispnet is rec_nyu
-DISP_NET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/15ep/dispnet_model_best.pth.tar
+DISP_NET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/15ep/dispnet_checkpoint.pth.tar
 
 # orig posenet is res18kitti256
-POSE_NET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/15ep/exp_pose_model_best.pth.tar
+POSE_NET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/15ep/exp_pose_checkpoint.pth.tar
 
 python train.py $TRAIN_SET \
 --folder-type sequence \
