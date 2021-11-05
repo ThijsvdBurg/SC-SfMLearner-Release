@@ -1,8 +1,8 @@
 DISP_NET=checkpoints/resnet18_depth_256/dispnet_model_best.pth.tar
 # DISP_NET=checkpoints/resnet50_depth_256/dispnet_model_best.pth.tar
 
-DATA_ROOT=/media/bjw/Disk/Dataset/kitti_depth_test
-RESULTS_DIR=results/test
+DATA_ROOT=datasets/kitti_mod
+RESULTS_DIR=results/kitti_mod
 
 # test
 python test_disp.py --resnet-layers 18 --img-height 256 --img-width 832 \
