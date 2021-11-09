@@ -1,9 +1,9 @@
 
 # points to location of RGB images
-INPUT_DIR=datasets/tu_delft_husky/testingseq
+INPUT_DIR=datasets/tu_delft_husky/zed/seq007
 
 # points to directory to output resulting depth images
-OUTPUT_DIR=results/husky_testingseq_zed_rectified_nyu_r18_832_256/seq007
+OUTPUT_DIR=results/husky_testingseq_zed_rectified_nyu_r18_853_256/seq007
 
 # points to trained model
 DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
@@ -16,7 +16,9 @@ python3 run_inference_resize.py \
 --output-dir $OUTPUT_DIR \
 --output-disp \
 --output-depth \
---img-width 832 \
+--img-width 853 \
 --img-height 256
+
+
 
 # --dataset-list $LIST_DIR
