@@ -41,7 +41,7 @@ def main():
     weights = torch.load(args.pretrained)
     disp_net.load_state_dict(weights['state_dict'])
     disp_net.eval()
-
+    print('running run_inference_scale_result_to_640_480')
     dataset_dir = Path(args.dataset_dir)
     output_dir = Path(args.output_dir)
     output_dir.makedirs_p()
@@ -89,22 +89,23 @@ def main():
             disp_transpose = np.transpose(disp, (1,2,0))
 
             imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), disp_transpose)
+            imsave(output_dir/'{}_disp_640_480{}'.format(file_name, file_ext), cv2.resize(disp_transpose,(640,480)))
             # imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), cv2.resize(disp_transpose,(args.img_height,args.img_width)))
 
 
         if args.output_depth:
 
             depth = 1/output
-            depth_array1 = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
-            imsave(output_dir/'{}_depth_max_10{}'.format(file_name, file_ext), np.transpose(depth_array1 , (1, 2, 0)))
+            # depth_array1 = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
+            # imsave(output_dir/'{}_depth_max_10{}'.format(file_name, file_ext), np.transpose(depth_array1 , (1, 2, 0)))
 
             depth_array2 = (255*tensor2array(depth, colormap='bone')).astype(np.uint8)
-
+            dept_transpose = np.transpose(depth_array2, (1, 2, 0))
             # print('max depth after t2a is: {}'.format(depth3.max().item()))
             # print('min depth after t2a is: {}'.format(depth3.min().item()))
 
-            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth_array2, (1, 2, 0)))
-            # imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext),cv2.resize( np.transpose(depth_array2, (1, 2, 0)),(args.img_height,args.img_width)))
+            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), dept_transpose)
+            imsave(output_dir/'{}_depth_max_None_640_480{}'.format(file_name,file_ext),cv2.resize(dept_transpose,(640,480)))
 
             # depth = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
 
