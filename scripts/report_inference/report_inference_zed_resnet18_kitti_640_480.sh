@@ -1,4 +1,3 @@
-
 # points to location of RGB images
 INPUT_DIR=datasets/tu_delft_husky/zed/report_test_seq
 

@@ -81,15 +81,16 @@ def main():
         # print('max output disparity value is: {}'.format(output.max().item()))
 
         file_path, file_ext = file.relpath(args.dataset_dir).splitext()
-        file_name = '-'.join(file_path.splitall())
+        # file_name = '-'.join(file_path.splitall())
+        file_name = ''.join(file_path.splitall())
 
         if args.output_disp:
             # disp = (255*tensor2array(output, max_value=None, colormap='bone')).astype(np.uint8)
             disp = (255*tensor2array(output, max_value=None, colormap='rainbow')).astype(np.uint8)
             disp_transpose = np.transpose(disp, (1,2,0))
 
-            imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), disp_transpose)
-            imsave(output_dir/'{}_disp_640_480{}'.format(file_name, file_ext), cv2.resize(disp_transpose,(640,480)))
+            # imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), disp_transpose)
+            # imsave(output_dir/'{}_disp_640_480{}'.format(file_name, file_ext), cv2.resize(disp_transpose,(640,480)))
             # imsave(output_dir/'{}_disp{}'.format(file_name, file_ext), cv2.resize(disp_transpose,(args.img_height,args.img_width)))
 
 
@@ -104,8 +105,9 @@ def main():
             # print('max depth after t2a is: {}'.format(depth3.max().item()))
             # print('min depth after t2a is: {}'.format(depth3.min().item()))
 
-            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), dept_transpose)
+            # imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), dept_transpose)
             imsave(output_dir/'{}_depth_max_None_640_480{}'.format(file_name,file_ext),cv2.resize(dept_transpose,(640,480)))
+            print(output_dir,file_name,file_ext)
 
             # depth = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
 
