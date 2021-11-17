@@ -10,3 +10,4 @@ kitti_mod/
 datasets/kit*
 datasets/nyu*
 datasets/tu_delft*
+plots/
