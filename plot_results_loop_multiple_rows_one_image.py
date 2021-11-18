@@ -73,12 +73,12 @@ for fol in folders:
     # max_cols = 2
     max_im = 6 # max_rows * max_cols
     methods=['Input image',
-             '640x480 N+FT',
-             '832x256 K+FT',
-             '640x480 N',
-             '832x256 N',
-             '640x480 K',
-             '832x256 K']
+             'r18_NYU 320x256',
+             'r18_NYU 640x480',
+             'r18_NYU 832x256',
+             'r18_KITTI 640x480',
+             'r18_KITTI 832x256',
+             '']
 
     fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(18,10),sharex=True, sharey=True)
 
@@ -103,9 +103,10 @@ for fol in folders:
 
         axes[row, col].imshow(image, cmap="gray", aspect="auto")
 
-        # axes[row, 0].set_ylabel(methods[row])
+        axes[row, col].set_xlabel(methods[idx])
+        axes[row, col].xaxis.set_label_position('top')
 
-    plt.subplots_adjust(wspace=.05, hspace=.05)
+    plt.subplots_adjust(wspace=.05, hspace=.1)
     plt.xticks([])
     plt.yticks([])
     filename="three_column_plot_{}.png".format(fol)
@@ -115,5 +116,5 @@ for fol in folders:
 
     savepath=path.join(plotpath,filename)
     print(savepath)
-    fig.savefig(savepath)
+    fig.savefig(savepath,bbox_inches='tight')
     # plt.show()
