@@ -45,7 +45,7 @@ for fol in folders:
 
     images = [Image.open(f) for f in files]
     # print(len(images))
-    max_rows = 7
+    max_rows = 2
     max_cols = 3
     # max_rows = 3
     # max_cols = 2
