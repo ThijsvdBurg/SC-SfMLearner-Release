@@ -1,8 +1,8 @@
 # points to location of RGB images
-INPUT_DIR=datasets/tu_delft_husky/zed/report_test_seq
+INPUT_DIR=datasets/tu_delft_husky/report_test_seq
 
 # points to directory to output resulting depth images
-OUTPUT_DIR=results/20211109/husky_report_test_seq_zed_resnet18_depth_256_640_480
+OUTPUT_DIR=results/20211116/resnet18_depth_256_640_480
 
 # points to trained model
 DISPNET=checkpoints/resnet18_depth_256/dispnet_model_best.pth.tar

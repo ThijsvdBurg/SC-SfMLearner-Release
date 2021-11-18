@@ -1,13 +1,10 @@
 # points to location of RGB images
-
 INPUT_DIR=datasets/tu_delft_husky/report_test_seq
 
 # points to directory to output resulting depth images
-
-OUTPUT_DIR=results/20211116/husky_report_test_seq_zed_rectified_nyu_r18_640_480
+OUTPUT_DIR=results/20211116/rectified_nyu_r18_640_480
 
 # points to trained model
-
 DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
 
 # actually run the inference on each image
