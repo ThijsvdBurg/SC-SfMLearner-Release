@@ -6,7 +6,7 @@ python train.py $TRAIN_SET \
 --folder-type sequence \
 --resnet-layers 18 \
 --num-scales 1 \
- -b8 -s0.1 -c0.5 --epochs 3 \
+-b8 -s0.1 -c0.5 --epochs 9 \
 --with-ssim 1 \
 --with-mask 1 \
 --with-auto-mask 1 \
