@@ -12,12 +12,11 @@ from os import W_OK
 import argparse
 
 parser = argparse.ArgumentParser(description="generate plot for report")
-parser.add_argument("--input_dir", required=True, help="Input ROS bag.")
-parser.add_argument("--figwidth", default=18, help="Input ROS bag.")
-parser.add_argument("--figheight", default=10, help="Input ROS bag.")
-
-# parser.add_argument("--rows", required=True, help="numer of rows in figure")
-# parser.add_argument("--cols", required=True, help="number of columns in figure")
+parser.add_argument("--input_dir", required=True)
+parser.add_argument("--figwidth", default=18, type=int)
+parser.add_argument("--figheight", default=10, type=int)
+parser.add_argument("--rows", required=True, type=int)
+parser.add_argument("--cols", required=True, type=int)
 
 args = parser.parse_args()
 
@@ -59,14 +58,14 @@ for fol in folders:
 
     images = [Image.open(f) for f in files]
     # print(len(images))
-    max_rows = 3
-    max_cols = 5
+    max_rows = args.rows
+    max_cols = args.cols
     figw = args.figwidth
     figh = args.figheight
     # max_rows = 3
     # max_cols = 2
-    max_im = max_rows * max_cols
-    methods=['Input image',
+    max_im = 6 # max_rows * max_cols
+    methods=['Input i§mage',
              'r18_NYU 320x256',
              'r18_NYU 640x480',
              'r18_NYU 832x256',
@@ -76,7 +75,7 @@ for fol in folders:
     print('figw=',figw)
     print('figh=',figh)
 
-    fig, axes = plt.subplots(nrows=3, ncols=5, figsize=(20,8),sharex=True, sharey=True)
+    fig, axes = plt.subplots(nrows=max_rows, ncols=max_cols, figsize=(figw,figh),sharex=True, sharey=True)
 
     for idx, image in enumerate(images):
         # print(files[idx])
@@ -99,13 +98,13 @@ for fol in folders:
 
         axes[row, col].imshow(image, cmap="gray", aspect="auto")
 
-        axes[row, col].set_xlabel(methods[idx],fontsize = 14)
-        axes[row, col].xaxis.set_label_position('top')
+        axes[row].set_ylabel(methods[idx],fontsize = 14)
+        # axes[row].xaxis.set_label_position('top')
 
     plt.subplots_adjust(wspace=.05, hspace=.1)
     plt.xticks([])
     plt.yticks([])
-    filename="single_input_PT_output_plot_{}_{}_{}.png".format(figw,figh,fol)
+    filename="sbs_KITTI_640_vs_832_plot_{}_{}_{}.png".format(figw,figh,fol)
     plotpath=path.join(indir,'plots')
     if access(plotpath, W_OK)!=True:
         mkdir(plotpath)
