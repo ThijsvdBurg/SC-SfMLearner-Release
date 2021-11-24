@@ -13,6 +13,9 @@ import argparse
 
 parser = argparse.ArgumentParser(description="generate plot for report")
 parser.add_argument("--input_dir", required=True, help="Input ROS bag.")
+parser.add_argument("--figwidth", default=18, help="Input ROS bag.")
+parser.add_argument("--figheight", default=10, help="Input ROS bag.")
+
 # parser.add_argument("--rows", required=True, help="numer of rows in figure")
 # parser.add_argument("--cols", required=True, help="number of columns in figure")
 
@@ -40,7 +43,7 @@ for fol in folders:
             del files[i]
     files.sort()
 
-    delstr = 'delelete'
+    delstr = 'delete'
 
     for i, f in enumerate(files):
         # print(files[i])
@@ -49,17 +52,6 @@ for fol in folders:
         if f.find(delstr)!=-1:
             print(files[i],'will be deleted')
             del files[i]
-        # if str.find(delstr, beg=0, end=len(string))!=0:
-        #     del files[i]
-    # for i, f in enumerate(files):
-    #     string=files[i]
-    #     # print('string is',string)
-    #     found = string.find(delstr)
-    #     print('found is ', found)
-    #     if found!=-1:
-    #         print(files[i],'will be deleted')
-    #         del files[i]
-
 
     print(len(files),'files left in the list')
     for f in files:
@@ -69,6 +61,8 @@ for fol in folders:
     # print(len(images))
     max_rows = 2
     max_cols = 3
+    figw = args.figwidth
+    figh = args.figheight
     # max_rows = 3
     # max_cols = 2
     max_im = 6 # max_rows * max_cols
@@ -79,8 +73,10 @@ for fol in folders:
              'r18_KITTI 640x480',
              'r18_KITTI 832x256',
              '']
+    print('figw=',figw)
+    print('figh=',figh)
 
-    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(18,10),sharex=True, sharey=True)
+    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(20,8),sharex=True, sharey=True)
 
     for idx, image in enumerate(images):
         # print(files[idx])
@@ -103,13 +99,13 @@ for fol in folders:
 
         axes[row, col].imshow(image, cmap="gray", aspect="auto")
 
-        axes[row, col].set_xlabel(methods[idx])
+        axes[row, col].set_xlabel(methods[idx],fontsize = 12)
         axes[row, col].xaxis.set_label_position('top')
 
     plt.subplots_adjust(wspace=.05, hspace=.1)
     plt.xticks([])
     plt.yticks([])
-    filename="three_column_plot_{}.png".format(fol)
+    filename="single_input_PT_output_plot_{}_{}_{}.png".format(figw,figh,fol)
     plotpath=path.join(indir,'plots')
     if access(plotpath, W_OK)!=True:
         mkdir(plotpath)
