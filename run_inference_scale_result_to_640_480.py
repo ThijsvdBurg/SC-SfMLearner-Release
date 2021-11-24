@@ -69,7 +69,7 @@ def main():
             # print('\n np img size is ',img.shape)
         #############################################################################################
         img_transpose = np.transpose(img2, (2, 0, 1))
-        print('\n np img_transpose size is ',img_transpose.shape)
+        # print('\n np img_transpose size is ',img_transpose.shape)
         tensor_img = torch.from_numpy(img_transpose).unsqueeze(0)
 
         # print('\n tensor_img size is ',tensor_img.shape)

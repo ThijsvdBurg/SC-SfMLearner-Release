@@ -130,13 +130,10 @@ def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsi
     ref_img_warped, valid_mask, projected_depth, computed_depth = inverse_warp2(ref_img, tgt_depth, ref_depth, pose, intrinsic, padding_mode)
 
     diff_img = (tgt_img - ref_img_warped).abs().clamp(0, 1)
-
     diff_depth = ((computed_depth - projected_depth).abs() / (computed_depth + projected_depth)).clamp(0, 1)
-
     if with_auto_mask == True:
         auto_mask = (diff_img.mean(dim=1, keepdim=True) < (tgt_img - ref_img).abs().mean(dim=1, keepdim=True)).float() * valid_mask
         valid_mask = auto_mask
-
     if with_ssim == True:
         ssim_map = compute_ssim_loss(tgt_img, ref_img_warped)
         diff_img = (0.15 * diff_img + 0.85 * ssim_map)
@@ -173,7 +170,6 @@ def mean_on_mask(diff, valid_mask):
     else:
         mean_value = torch.tensor(0).float().to(device)
     return mean_value
-
 
 def compute_smooth_loss(tgt_depth, tgt_img, ref_depths, ref_imgs):
     def get_smooth_loss(disp, img):
