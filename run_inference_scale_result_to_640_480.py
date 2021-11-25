@@ -107,7 +107,8 @@ def main():
             # print('min depth after t2a is: {}'.format(depth3.min().item()))
 
             # imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), dept_transpose)
-            imsave(output_dir/'{}_640_480{}'.format(file_name,file_ext),cv2.resize(dept_transpose,(640,480)))
+
+            imsave(output_dir/'{}_{}{}'.format(file_name,args.output_name,file_ext),cv2.resize(dept_transpose,(640,480)))
             # print(output_dir,file_name,file_ext)
 
             # depth = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
