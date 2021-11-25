@@ -22,7 +22,7 @@ parser.add_argument("--img-width", default=832, type=int, help="Image width")
 parser.add_argument("--no-resize", action='store_true', help="no resizing is done")
 parser.add_argument("--dataset-list", default=None, type=str, help="Dataset list file")
 parser.add_argument("--dataset-dir", default='.', type=str, help="Dataset directory")
-parser.add_argument("--output_dir", default='output', type=str, help="Output directory")
+parser.add_argument("--output-dir", default='output', type=str, help="Output directory")
 parser.add_argument("--outname", required=True, type=str, help="Output file name, to differentiate between networks")
 parser.add_argument("--img-exts", default=['png', 'jpg', 'bmp'], nargs='*', type=str, help="images extensions to glob")
 parser.add_argument('--resnet-layers', required=True, type=int, default=18, choices=[18, 50],
