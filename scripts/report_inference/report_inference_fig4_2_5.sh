@@ -14,7 +14,7 @@ python3 run_inference_scale_result_to_640_480.py \
 --resnet-layers 18 \
 --dataset-dir $INPUT_DIR \
 --outdir $OUTPUT_DIR \
---output-name $OUTPUT_NAME \
+--outname $OUTPUT_NAME \
 --output-depth \
 --img-width $IMW \
 --img-height $IMH
