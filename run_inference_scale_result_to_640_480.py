@@ -24,6 +24,7 @@ parser.add_argument("--no-resize", action='store_true', help="no resizing is don
 parser.add_argument("--dataset-list", default=None, type=str, help="Dataset list file")
 parser.add_argument("--dataset-dir", default='.', type=str, help="Dataset directory")
 parser.add_argument("--output-dir", default='output', type=str, help="Output directory")
+parser.add_argument("--output-name", required=True, type=str, help="Output file name, to differentiate between networks")
 parser.add_argument("--img-exts", default=['png', 'jpg', 'bmp'], nargs='*', type=str, help="images extensions to glob")
 parser.add_argument('--resnet-layers', required=True, type=int, default=18, choices=[18, 50],
                     help='depth network architecture.')
@@ -106,7 +107,7 @@ def main():
             # print('min depth after t2a is: {}'.format(depth3.min().item()))
 
             # imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), dept_transpose)
-            imsave(output_dir/'{}_depth_max_None_640_480{}'.format(file_name,file_ext),cv2.resize(dept_transpose,(640,480)))
+            imsave(output_dir/'{}_640_480{}'.format(file_name,file_ext),cv2.resize(dept_transpose,(640,480)))
             # print(output_dir,file_name,file_ext)
 
             # depth = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
