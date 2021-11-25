@@ -1,4 +1,6 @@
-DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
+# DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
+
+DISPNET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/9ep/dispnet_model_best.pth.tar
 
 DATA_ROOT=datasets/nyu_test
 RESULTS_DIR=results/nyu_self

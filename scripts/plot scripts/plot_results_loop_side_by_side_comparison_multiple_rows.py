@@ -42,7 +42,8 @@ for fol in folders:
             del files[i]
     files.sort()
 
-    delstr = 'delete'
+    delstr = 'rectified'
+    delstr2 = 'delete'
 
     for i, f in enumerate(files):
         # print(files[i])
@@ -51,7 +52,11 @@ for fol in folders:
         if f.find(delstr)!=-1:
             print(files[i],'will be deleted')
             del files[i]
-
+        if f.find(delstr2)!=-1:
+            print(files[i],'will be deleted')
+            del files[i]
+    files.sort()
+    # print(files)
     print(len(files),'files left in the list')
     for f in files:
         print(f)
@@ -64,27 +69,27 @@ for fol in folders:
     figh = args.figheight
     # max_rows = 3
     # max_cols = 2
-    max_im = 6 # max_rows * max_cols
-    methods=['Input i§mage',
-             'r18_NYU 320x256',
+    max_im = max_rows * max_cols
+    methods=['Input image',
+             # 'r18_NYU 320x256',
              'r18_NYU 640x480',
              'r18_NYU 832x256',
              'r18_KITTI 640x480',
              'r18_KITTI 832x256',
              '']
-    print('figw=',figw)
-    print('figh=',figh)
+    # print('figw=',figw)
+    # print('figh=',figh)
 
     fig, axes = plt.subplots(nrows=max_rows, ncols=max_cols, figsize=(figw,figh),sharex=True, sharey=True)
 
     for idx, image in enumerate(images):
-        # print(files[idx])
-        if idx==max_im:
+        if idx==max_im-5:
             break
-        print('file',idx+1)
+        print(files[idx])
+        # print('file',idx+1)
         row = idx % max_rows
         col = idx // max_rows
-        print(row,' row')
+        # print(row,' row')
         # print(col,' col')
         # if col>0:
         # axes[row, col].axis("off")
@@ -98,7 +103,9 @@ for fol in folders:
 
         axes[row, col].imshow(image, cmap="gray", aspect="auto")
 
-        axes[row].set_ylabel(methods[idx],fontsize = 14)
+        if col==0:
+            # axes[row].set_ylabel(methods[row],fontsize = 14)
+            axes[row,col].set_ylabel(methods[row])
         # axes[row].xaxis.set_label_position('top')
 
     plt.subplots_adjust(wspace=.05, hspace=.1)
@@ -110,6 +117,6 @@ for fol in folders:
         mkdir(plotpath)
 
     savepath=path.join(plotpath,filename)
-    print(savepath)
+    # print(savepath)
     fig.savefig(savepath,bbox_inches='tight')
     # plt.show()

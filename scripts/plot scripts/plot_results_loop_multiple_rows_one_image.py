@@ -13,8 +13,8 @@ import argparse
 
 parser = argparse.ArgumentParser(description="generate plot for report")
 parser.add_argument("--input_dir", required=True, help="Input ROS bag.")
-parser.add_argument("--figwidth", default=18, help="Input ROS bag.")
-parser.add_argument("--figheight", default=10, help="Input ROS bag.")
+# parser.add_argument("--figwidth", default=18, help="Input ROS bag.")
+# parser.add_argument("--figheight", default=10, help="Input ROS bag.")
 
 # parser.add_argument("--rows", required=True, help="numer of rows in figure")
 # parser.add_argument("--cols", required=True, help="number of columns in figure")
@@ -43,7 +43,8 @@ for fol in folders:
             del files[i]
     files.sort()
 
-    delstr = 'delete'
+    delstr = 'husky'
+    delstr2 = '640_480_resnet18_depth_256_1280_960'
 
     for i, f in enumerate(files):
         # print(files[i])
@@ -52,19 +53,23 @@ for fol in folders:
         if f.find(delstr)!=-1:
             print(files[i],'will be deleted')
             del files[i]
-
+        if f.find(delstr2)!=-1:
+            print(files[i],'will be deleted')
+            del files[i]
+    files.sort()
     print(len(files),'files left in the list')
     for f in files:
         print(f)
 
     images = [Image.open(f) for f in files]
+
     # print(len(images))
-    max_rows = 3
-    max_cols = 5
+    # max_rows = 2
+    # max_cols = 3
     figw = args.figwidth
     figh = args.figheight
-    # max_rows = 3
-    # max_cols = 2
+    max_rows = args.rows
+    max_cols = args.cols
     max_im = max_rows * max_cols
     methods=['Input image',
              'r18_NYU 320x256',
@@ -72,20 +77,28 @@ for fol in folders:
              'r18_NYU 832x256',
              'r18_KITTI 640x480',
              'r18_KITTI 832x256',
+             '',
+             '',
+             '',
+             '',
+             '',
+             '',
+             '',
+             '',
              '']
     print('figw=',figw)
     print('figh=',figh)
 
-    fig, axes = plt.subplots(nrows=3, ncols=5, figsize=(20,8),sharex=True, sharey=True)
+    fig, axes = plt.subplots(nrows=max_rows, ncols=max_cols, figsize=(figw,figh),sharex=True, sharey=True)
 
     for idx, image in enumerate(images):
-        # print(files[idx])
+        print(files[idx])
         if idx==max_im:
             break
-        print('file',idx+1)
+        # print('file',idx+1)
         row = idx % max_rows
         col = idx // max_rows
-        print(row,' row')
+        # print(row,' row')
         # print(col,' col')
         # if col>0:
         # axes[row, col].axis("off")
