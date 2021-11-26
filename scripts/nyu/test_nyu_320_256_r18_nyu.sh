@@ -1,7 +1,7 @@
 DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
 
 DATA_ROOT=datasets/nyu_test
-RESULTS_DIR=results/nyu_self
+RESULTS_DIR=results/nyu_r18_nyu_320_256
 
 #  test 256*320 images
 python test_disp.py \

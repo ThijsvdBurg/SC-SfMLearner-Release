@@ -3,7 +3,7 @@
 DISPNET=checkpoints/r18_husky_320_256_pretrained_nyu_disp_kitti_pose/3ep/dispnet_model_best.pth.tar
 
 DATA_ROOT=datasets/nyu_test
-RESULTS_DIR=results/nyu_self
+RESULTS_DIR=results/nyu_r18_husky_320_256_3ep
 
 #  test 256*320 images
 python test_disp.py \
