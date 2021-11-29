@@ -42,7 +42,7 @@ for fol in folders:
             del files[i]
     files.sort()
 
-    delstr = 'rectified'
+    delstr = 'none'
     delstr2 = 'delete'
 
     for i, f in enumerate(files):
@@ -67,8 +67,6 @@ for fol in folders:
     max_cols = args.cols
     figw = args.figwidth
     figh = args.figheight
-    # max_rows = 3
-    # max_cols = 2
     max_im = max_rows * max_cols
     methods=['Input image',
              # 'r18_NYU 320x256',
@@ -77,13 +75,19 @@ for fol in folders:
              'r18_KITTI 640x480',
              'r18_KITTI 832x256',
              '']
+    # methods=['Input image',
+    #          'r18_HUSKY 640x480',
+             # 'r18_HUSKY 832x256',
+             # 'r18_NYU 320x256',
+             # 'r18_KITTI 832x256',
+             # '']
     # print('figw=',figw)
     # print('figh=',figh)
 
     fig, axes = plt.subplots(nrows=max_rows, ncols=max_cols, figsize=(figw,figh),sharex=True, sharey=True)
 
     for idx, image in enumerate(images):
-        if idx==max_im-5:
+        if idx==max_im:
             break
         print(files[idx])
         # print('file',idx+1)
@@ -105,10 +109,10 @@ for fol in folders:
 
         if col==0:
             # axes[row].set_ylabel(methods[row],fontsize = 14)
-            axes[row,col].set_ylabel(methods[row])
+            axes[row,col].set_ylabel(methods[row], fontsize=16)
         # axes[row].xaxis.set_label_position('top')
 
-    plt.subplots_adjust(wspace=.05, hspace=.1)
+    plt.subplots_adjust(wspace=.05, hspace=.05)
     plt.xticks([])
     plt.yticks([])
     filename="sbs_KITTI_640_vs_832_plot_{}_{}_{}.png".format(figw,figh,fol)

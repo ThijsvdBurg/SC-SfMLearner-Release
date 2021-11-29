@@ -1,0 +1,228 @@
+
+DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
+DATA_ROOT=datasets/nyu_test
+RESULTS_DIR=results/nyu_r18_nyu_320_256
+
+#  test 256*320 images
+python test_disp.py \
+--resnet-layers 18 \
+--img-width 320 \
+--img-height 256 \
+--pretrained-dispnet $DISPNET \
+--dataset-dir $DATA_ROOT/color \
+--output-dir $RESULTS_DIR
+
+# evaluate
+python eval_depth.py \
+--dataset nyu \
+--pred_depth=$RESULTS_DIR/predictions.npy \
+--gt_depth=$DATA_ROOT/depth.npy 
+
+ Scaling ratios | med: 7.840 | std: 0.235
+ Scaling ratios | mean: 7.919 +- std: 1.842
+
+   abs_rel |    log10 |     rmse |       a1 |       a2 |       a3 | 
+&   0.147  &   0.062  &   0.536  &   0.804  &   0.950  &   0.986  \\
+
+
+
+DISPNET=checkpoints/rectified_nyu_r18/dispnet_model_best.pth.tar
+RESULTS_DIR=results/nyu_r18_nyu_640_480
+
+#  test 256*320 images
+python test_disp.py \
+--resnet-layers 18 \
+--img-width 640 \
+--img-height 480 \
+--pretrained-dispnet $DISPNET \
+--dataset-dir $DATA_ROOT/color \
+--output-dir $RESULTS_DIR
+
+# evaluate
+python eval_depth.py \
+--dataset nyu \
+--pred_depth=$RESULTS_DIR/predictions.npy \
+--gt_depth=$DATA_ROOT/depth.npy 
+
+
+ Scaling ratios | med: 8.282 | std: 0.272
+ Scaling ratios | mean: 8.446 +- std: 2.252
+
+   abs_rel |    log10 |     rmse |       a1 |       a2 |       a3 | 
+&   0.231  &   0.092  &   0.734  &   0.651  &   0.882  &   0.959  \\
+
+
+
+
+DISPNET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/9ep/dispnet_model_best.pth.tar
+
+RESULTS_DIR=results/nyu_r18_husky_640_480
+
+#  test 256*320 images
+python test_disp.py \
+--resnet-layers 18 \
+--img-width 640 \
+--img-height 480 \
+--pretrained-dispnet $DISPNET \
+--dataset-dir $DATA_ROOT/color \
+--output-dir $RESULTS_DIR
+
+# evaluate
+python eval_depth.py \
+--dataset nyu \
+--pred_depth=$RESULTS_DIR/predictions.npy \
+--gt_depth=$DATA_ROOT/depth.npy 
+
+
+ Scaling ratios | med: 6.796 | std: 0.232
+ Scaling ratios | mean: 6.761 +- std: 1.579
+
+   abs_rel |    log10 |     rmse |       a1 |       a2 |       a3 | 
+&   0.257  &   0.106  &   0.856  &   0.569  &   0.847  &   0.950  \\
+
+
+DISPNET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/3ep/dispnet_model_best.pth.tar
+
+RESULTS_DIR=results/nyu_r18_husky_320_256_3ep
+
+#  test 256*320 images
+python test_disp.py \
+--resnet-layers 18 \
+--img-width 320 \
+--img-height 256 \
+--pretrained-dispnet $DISPNET \
+--dataset-dir $DATA_ROOT/color \
+--output-dir $RESULTS_DIR
+
+# evaluate
+python eval_depth.py \
+--dataset nyu \
+--pred_depth=$RESULTS_DIR/predictions.npy \
+--gt_depth=$DATA_ROOT/depth.npy 
+
+ Scaling ratios | med: 6.819 | std: 0.215
+ Scaling ratios | mean: 6.802 +- std: 1.469
+
+   abs_rel |    log10 |     rmse |       a1 |       a2 |       a3 | 
+&   0.264  &   0.107  &   0.920  &   0.529  &   0.860  &   0.969  \\
+
+
+
+
+DISPNET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/6ep/dispnet_model_best.pth.tar
+
+RESULTS_DIR=results/nyu_r18_husky_320_256_6ep
+
+#  test 256*320 images
+python test_disp.py \
+--resnet-layers 18 \
+--img-width 320 \
+--img-height 256 \
+--pretrained-dispnet $DISPNET \
+--dataset-dir $DATA_ROOT/color \
+--output-dir $RESULTS_DIR
+
+# evaluate
+python eval_depth.py \
+--dataset nyu \
+--pred_depth=$RESULTS_DIR/predictions.npy \
+--gt_depth=$DATA_ROOT/depth.npy 
+ Scaling ratios | med: 6.819 | std: 0.215
+ Scaling ratios | mean: 6.802 +- std: 1.469
+
+   abs_rel |    log10 |     rmse |       a1 |       a2 |       a3 | 
+&   0.264  &   0.107  &   0.920  &   0.529  &   0.860  &   0.969  \\
+
+
+
+
+DISPNET=checkpoints/r18_husky_640_480_pretrained_nyu_disp_kitti_pose/9ep/dispnet_model_best.pth.tar
+
+RESULTS_DIR=results/nyu_r18_husky_320_256_6ep
+
+#  test 256*320 images
+python test_disp.py \
+--resnet-layers 18 \
+--img-width 320 \
+--img-height 256 \
+--pretrained-dispnet $DISPNET \
+--dataset-dir $DATA_ROOT/color \
+--output-dir $RESULTS_DIR
+
+# evaluate
+python eval_depth.py \
+--dataset nyu \
+--pred_depth=$RESULTS_DIR/predictions.npy \
+--gt_depth=$DATA_ROOT/depth.npy 
+ Scaling ratios | med: 6.870 | std: 0.221
+ Scaling ratios | mean: 6.828 +- std: 1.518
+
+   abs_rel |    log10 |     rmse |       a1 |       a2 |       a3 | 
+&   0.270  &   0.108  &   0.967  &   0.531  &   0.851  &   0.965  \\
+
+
+
+
+
+DISPNET=checkpoints/r18_husky_320_256_pretrained_nyu_disp_kitti_pose/3ep/dispnet_model_best.pth.tar
+
+RESULTS_DIR=results/nyu_r18_husky_320_256_3ep
+
+#  test 256*320 images
+python test_disp.py \
+--resnet-layers 18 \
+--img-width 320 \
+--img-height 256 \
+--pretrained-dispnet $DISPNET \
+--dataset-dir $DATA_ROOT/color \
+--output-dir $RESULTS_DIR
+
+# evaluate
+python eval_depth.py \
+--dataset nyu \
+--pred_depth=$RESULTS_DIR/predictions.npy \
+--gt_depth=$DATA_ROOT/depth.npy 
+
+ Scaling ratios | med: 2.485 | std: 0.293
+ Scaling ratios | mean: 2.555 +- std: 0.728
+
+   abs_rel |    log10 |     rmse |       a1 |       a2 |       a3 | 
+&   0.416  &   0.151  &   1.217  &   0.425  &   0.720  &   0.868  \\
+
+
+
+
+654 files to test
+100% 654/654 [01:01<00:00, 10.62it/s]
+Avg Time:  0.033941002067075954  seconds.
+Avg Speed:  29.462889693820724  fps
+==> Evaluating depth result...
+100% 654/654 [00:26<00:00, 24.43it/s]
+
+654 files to test
+100% 654/654 [01:00<00:00, 10.85it/s]
+Avg Time:  0.03401597085713611  seconds.
+Avg Speed:  29.39795557210189  fps
+==> Evaluating depth result...
+100% 654/654 [00:25<00:00, 25.30it/s]
+
+654 files to test
+100% 654/654 [01:00<00:00, 10.78it/s]
+Avg Time:  0.034059058271052274  seconds.
+Avg Speed:  29.360764823316543  fps
+==> Evaluating depth result...
+100% 654/654 [00:26<00:00, 24.36it/s]
+
+654 files to test
+100% 654/654 [01:00<00:00, 10.74it/s]
+Avg Time:  0.034006718101851435  seconds.
+Avg Speed:  29.405954347166386  fps
+==> Evaluating depth result...
+100% 654/654 [00:26<00:00, 25.02it/s]
+
+654 files to test
+100% 654/654 [00:59<00:00, 11.05it/s]
+Avg Time:  0.0340643822235434  seconds.
+Avg Speed:  29.35617600335801  fps
+==> Evaluating depth result...
+100% 654/654 [00:27<00:00, 23.99it/s]

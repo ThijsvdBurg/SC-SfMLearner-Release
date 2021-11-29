@@ -134,3 +134,9 @@ python eval_depth.py \
 --dataset nyu \
 --pred_depth=$RESULTS_DIR/predictions.npy \
 --gt_depth=$DATA_ROOT/depth.npy 
+
+
+
+
+
+
