@@ -67,11 +67,12 @@ def main():
             # replace line below with cv2.resize, which was easier
             # img = imresize(img, (args.img_height, args.img_width)).astype(np.float32)
 
-            # img = cv2.resize(img, (args.img_height, args.img_width)).astype(np.float32)
+            img = cv2.resize(img, (args.img_height, args.img_width)).astype(np.float32)
             img2 = cv2.resize(img, (args.img_width, args.img_height)).astype(np.float32)
             # print('\n np img size is ',img.shape)
         #############################################################################################
         img_transpose = np.transpose(img2, (2, 0, 1))
+        img_transpose = np.transpose(img, (2, 0, 1))
         # print('\n np img_transpose size is ',img_transpose.shape)
         tensor_img = torch.from_numpy(img_transpose).unsqueeze(0)
 
