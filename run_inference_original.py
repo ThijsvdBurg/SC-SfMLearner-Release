@@ -20,10 +20,10 @@ parser.add_argument("--pretrained", required=True, type=str, help="pretrained Di
 parser.add_argument("--img-height", default=256, type=int, help="Image height")
 parser.add_argument("--img-width", default=832, type=int, help="Image width")
 parser.add_argument("--no-resize", action='store_true', help="no resizing is done")
-
 parser.add_argument("--dataset-list", default=None, type=str, help="Dataset list file")
 parser.add_argument("--dataset-dir", default='.', type=str, help="Dataset directory")
 parser.add_argument("--output-dir", default='output', type=str, help="Output directory")
+parser.add_argument("--output-name", required=True, type=str, help="Output file name, to differentiate between networks")
 parser.add_argument("--img-exts", default=['png', 'jpg', 'bmp'], nargs='*', type=str, help="images extensions to glob")
 parser.add_argument('--resnet-layers', required=True, type=int, default=18, choices=[18, 50],
                     help='depth network architecture.')
@@ -72,7 +72,7 @@ def main():
             # print('\n np img size is ',img.shape)
         #############################################################################################
         img_transpose = np.transpose(img2, (2, 0, 1))
-        img_transpose = np.transpose(img, (2, 0, 1))
+        img_transpose = np.transpose(img, (2, 0, 1)) #wrong way around
         # print('\n np img_transpose size is ',img_transpose.shape)
         tensor_img = torch.from_numpy(img_transpose).unsqueeze(0)
 
@@ -115,7 +115,8 @@ def main():
             # depth2 = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
 
             depth_array2 = (255*tensor2array(depth3, colormap='bone')).astype(np.uint8)
-            imsave(output_dir/'{}_depth_max_None{}'.format(file_name, file_ext), np.transpose(depth_array2, (1, 2, 0)))
+            imsave(output_dir/'{}_{}{}'.format(file_name,args.output_name,file_ext), np.transpose(depth_array2, (1, 2, 0)))
+            # imsave(output_dir/'{}_{}{}'.format(file_name,args.output_name,file_ext),cv2.resize(dept_transpose,(640,480)))
 
 if __name__ == '__main__':
     main()
