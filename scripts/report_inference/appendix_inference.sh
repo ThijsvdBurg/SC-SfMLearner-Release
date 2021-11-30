@@ -14,7 +14,7 @@ python3 run_inference_original.py \
 --resnet-layers 18 \
 --dataset-dir $INPUT_DIR \
 --output-dir $OUTPUT_DIR \
---output-name appendix_inference \
+--output-name appendix_inference_640_480 \
 --output-depth \
 --img-width $IMW \
 --img-height $IMH
@@ -27,7 +27,7 @@ python3 run_inference_original.py \
 --resnet-layers 18 \
 --dataset-dir $INPUT_DIR \
 --output-dir $OUTPUT_DIR \
---output-name appendix_inference \
+--output-name appendix_inference_832_256 \
 --output-depth \
 --img-width $IMW \
 --img-height $IMH
