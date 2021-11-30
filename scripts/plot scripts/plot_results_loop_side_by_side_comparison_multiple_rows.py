@@ -75,12 +75,12 @@ for fol in folders:
              'r18_KITTI 640x480',
              'r18_KITTI 832x256',
              '']
-    # methods=['Input image',
-    #          'r18_HUSKY 640x480',
-             # 'r18_HUSKY 832x256',
-             # 'r18_NYU 320x256',
-             # 'r18_KITTI 832x256',
-             # '']
+    methods=['Input image',
+             'r18_HUSKY 640x480',
+             'r18_HUSKY 832x256',
+             'r18_NYU 320x256',
+             'r18_KITTI 832x256',
+             '']
     # print('figw=',figw)
     # print('figh=',figh)
 
