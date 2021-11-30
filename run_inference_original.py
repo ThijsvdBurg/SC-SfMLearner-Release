@@ -108,13 +108,13 @@ def main():
 
         if args.output_depth:
             depth = 1/output
-            depth_array1 = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
-            imsave(output_dir/'{}_depth_max_10{}'.format(file_name, file_ext), np.transpose(depth_array1 , (1, 2, 0)))
+            # depth_array1 = (255*tensor2array(depth, max_value=10, colormap='rainbow')).astype(np.uint8)
+            # imsave(output_dir/'{}_depth_max_10{}'.format(file_name, file_ext), np.transpose(depth_array1 , (1, 2, 0)))
 
             # imsave(output_dir/'{}_depth{}'.format(file_name, file_ext), np.transpose(depth, (1, 2, 0)))
             # depth2 = (255*tensor2array(output, max_value=None, colormap='rainbow' )).astype(np.uint8)
 
-            depth_array2 = (255*tensor2array(depth3, colormap='bone')).astype(np.uint8)
+            depth_array2 = (255*tensor2array(depth, colormap='bone')).astype(np.uint8)
             imsave(output_dir/'{}_{}{}'.format(file_name,args.output_name,file_ext), np.transpose(depth_array2, (1, 2, 0)))
             # imsave(output_dir/'{}_{}{}'.format(file_name,args.output_name,file_ext),cv2.resize(dept_transpose,(640,480)))
 
