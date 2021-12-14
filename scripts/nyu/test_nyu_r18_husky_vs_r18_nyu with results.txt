@@ -117,7 +117,7 @@ RESULTS_DIR=results/nyu_r18_husky_320_256_6ep
 python test_disp.py \
 --resnet-layers 18 \
 --img-width 320 \
---img-height 256 \
+--img-height 256 \ 
 --pretrained-dispnet $DISPNET \
 --dataset-dir $DATA_ROOT/color \
 --output-dir $RESULTS_DIR
